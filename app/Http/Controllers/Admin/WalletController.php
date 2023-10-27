@@ -156,6 +156,7 @@ class WalletController extends Controller
 
         if ($status == '1') {
             $deposit->update(['status' => '1']);
+            Helper::wallet($deposit->user_id, '1', $deposit->amount, '2', 'Add money');
             return response()->json(['status' => true, 'message' => 'Deposit has been approved successfully.']);
         } elseif ($status == '0') {
             $deposit->update(['status' => '0']);
