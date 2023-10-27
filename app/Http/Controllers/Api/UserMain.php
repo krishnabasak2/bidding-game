@@ -61,7 +61,7 @@ class UserMain extends Controller
             }
 
             $user = User::where('phone', $request['phone'])->first();
-            if (!empty($user)) {
+            if (!empty($user) && $user->status == '1') {
 
                 if (md5(md5(md5($request['password']))) == $user->password) {
                     $token = $user->createToken('myApp')->plainTextToken;
@@ -69,8 +69,10 @@ class UserMain extends Controller
                 } else {
                     return response()->json(['status' => false, 'message' => 'Password not match.', 'data' => null], 400);
                 }
+            } elseif (!empty($user) && $user->status == '0') {
+                return response()->json(['status' => false, 'message' => 'Your account has been suspended.', 'data' => null], 400);
             } else {
-                return response()->json(['status' => false, 'message' => 'Phone number not exist.', 'data' => null]);
+                return response()->json(['status' => false, 'message' => 'Phone number not exist.', 'data' => null], 400);
             }
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'message' => 'Internal server errors.', 'data' => null], 500);
@@ -91,7 +93,12 @@ class UserMain extends Controller
     public function get_user()
     {
         try {
-            return response()->json(['status' => true, 'user' => Auth::user(), 200]);
+            $user = User::where(['id' => Auth::id(), 'status' => '1'])->first();
+            if (!empty($user)) {
+                return response()->json(['status' => true, 'user' => $user, 200]);
+            } else {
+                return response()->json(['status' => false, 'user' => null, 400]);
+            }
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'message' => 'Internal server errors.', 'data' => null], 500);
         }
@@ -254,7 +261,7 @@ class UserMain extends Controller
 
             if ($payout) {
 
-                Helper::wallet(Auth::id(), 0, $request['amount'], '3', 'For payout');
+                Helper::wallet(Auth::id(), '0', $request['amount'], '3', 'For payout');
 
                 return response()->json(['status' => true, 'message' => "Payout request successful.", 'data' => null], 200);
             } else {
