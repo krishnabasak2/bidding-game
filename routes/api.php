@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('get', [UserMain::class, 'get_user']);
         Route::post('update', [UserMain::class, 'update']);
+        Route::post('change-password', [UserMain::class, 'change_password']);
     });
 
     Route::prefix('wallet')->group(function () {

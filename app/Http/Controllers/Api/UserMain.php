@@ -133,6 +133,37 @@ class UserMain extends Controller
         }
     }
 
+    public function change_password(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'current_password'          => 'required|min:6',
+                'new_password'              => 'required_with:confirm_password|same:confirm_new_password',
+                'confirm_new_password'      => 'required|min:6',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => null]);
+            }
+
+            $user = User::where('id', Auth::id())->first();
+
+            if (!empty($user)) {
+                if (md5(md5(md5($request['current_password']))) == $user->password) {
+                    $user->update(['password' => md5(md5(md5($request['new_password'])))]);
+
+                    return response()->json(['status' => true, 'message' => 'Password Has Been Updated Successully.', 'data' => $user], 200);
+                } else {
+                    return response()->json(['status' => false, 'message' => "Current password not match.", 'data' => null], 400);
+                }
+            } else {
+                return response()->json(['status' => false, 'message' => "Something went wrong! Please try agin.", 'data' => null], 400);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['status' => false, 'message' => 'Internal server errors.', 'data' => $th], 500);
+        }
+    }
+
     public function get_payout_setting()
     {
         try {
