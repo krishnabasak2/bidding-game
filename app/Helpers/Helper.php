@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\SiteSetting;
 use App\Models\Transaction;
 use App\Models\User;
 
@@ -71,6 +72,38 @@ class Helper
             return true;
         } else {
             return false;
+        }
+    }
+
+    public static function sendPush($device_ids, $message)
+    {
+        $info = SiteSetting::where('id', '1')->first();
+
+        $content = array("en" => $message);
+        $heading = array("en" => $info->app_name);
+
+        foreach ($device_ids as $key => $device_id) {
+            $fields = array(
+                'app_id' => "63bccc3f-9b9c-4df0-a7bf-583a9b08ce30",
+                'include_external_user_ids' => array($device_id),
+                'data' => array("data" => "test data"),
+                'contents' => $content,
+                'headings' => $heading
+            );
+            $fields = json_encode($fields);
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8', 'Authorization: Basic MzcwZjU5YzAtODJhOS00ZjM0LTg3YTMtNDNhZGViNzdiM2Nk'));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HEADER, FALSE);
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+            return $response;
         }
     }
 }

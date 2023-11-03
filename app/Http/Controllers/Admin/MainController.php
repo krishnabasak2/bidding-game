@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\BidsHistory;
 use App\Models\Deposit;
@@ -257,5 +258,12 @@ class MainController extends Controller
         }
 
         return view('admin.change-password', $data);
+    }
+
+
+    public function test_push()
+    {
+        $response = Helper::sendPush(['9735170720123'], "testing push notification");
+        return $response;
     }
 }
