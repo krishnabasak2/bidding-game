@@ -72,6 +72,7 @@ Route::prefix('admin')->middleware('AdminCheck')->group(function () {
 });
 
 Route::get('logout', [MainController::class, 'logout']);
+Route::get('test-push', [MainController::class, 'test_push']);
 
 
 Route::get('reboot', function () {

@@ -391,6 +391,19 @@ class GameController extends Controller
 
             if ($game_result->update(['single_win_value' => $request['single_win_value'], 'patti_win_value' => $request['patti_win_value'], 'jodi_win_value' => $jodi_win_value, 'status' => '0'])) {
 
+
+
+                $single_num = (isset($request['single_win_value'])) ? $request['single_win_value'] : 'N/A';
+                $patti_num = (isset($request['patti_win_value'])) ? $request['patti_win_value'] : 'N/A';
+                $jora_num = (isset($jodi_win_value)) ? $jodi_win_value : 'N/A';
+
+                $game_name = $game_result->getGame[0]['title'];
+                $game_time = $game_result->getTime['title'];
+
+                $notification = "Result: $game_name - $game_time - (SINGLE = $single_num) - (PATTI = $patti_num) - (JODI = $jora_num)";
+
+                Helper::sendPush(['9735170720123'], $notification);
+
                 return redirect("/admin/game/active/{$game_result->game_id}")->with('message', 'Result Has Been Updated Successfully.');
             } else {
                 return redirect()->back()->with('message', 'Something Went Wrong.');
