@@ -82,6 +82,6 @@ Route::get('reboot', function () {
     Artisan::call('cache:clear');
 });
 Route::get('install', function () {
-    Artisan::call('storage:link');
-    Artisan::call("migrate:fresh --seed");
+    // Artisan::call('storage:link');
+    // Artisan::call("migrate:fresh --seed");
 });
