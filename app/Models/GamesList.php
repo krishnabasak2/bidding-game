@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GamesList extends Model
@@ -16,5 +17,10 @@ class GamesList extends Model
     public function getTime(): HasMany
     {
         return $this->hasMany(GamesTime::class, 'game_id', 'id');
+    }
+
+    public function get_last_time(): HasOne
+    {
+        return $this->hasOne(GamesTime::class, 'game_id', 'id')->latest('start_time');
     }
 }

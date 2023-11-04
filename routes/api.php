@@ -30,6 +30,7 @@ Route::prefix('game')->group(function () {
     Route::get('list', [AppMain::class, 'game_list']);
     Route::get('result/{id}', [AppMain::class, 'game_result']);
     Route::get('time/{game_id}', [AppMain::class, 'game_time']);
+    Route::get('result_data/{result_id}', [AppMain::class, 'result_data']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
