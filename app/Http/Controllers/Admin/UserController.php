@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -36,7 +37,7 @@ class UserController extends Controller
             }
 
             $count = User::count();
-            $request['password'] = md5(md5(md5($request['password'])));
+            $request['password'] = Hash::make($request['password']);
             $request['user_id'] = Helper::user_id($count, 4);
 
             if (User::create($request->except('_token'))) {
@@ -195,4 +196,14 @@ class UserController extends Controller
     //     $user = User::where('phone', 'LIKE', "%$phone%")->withTrashed()->first();
     //     return response()->json(['status' => true, 'data' => $user]);
     // }
+
+    public function search_user($key)
+    {
+        $user = User::where('phone', 'LIKE', "%$key%")->withTrashed()->first();
+        if (!empty($user)) {
+            return response()->json(['status' => true, 'user' => $user,], 200);
+        } else {
+            return response()->json(['status' => false, 'user' => $user, 'message' => 'User Not Found.'], 400);
+        }
+    }
 }

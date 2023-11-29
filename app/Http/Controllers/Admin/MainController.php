@@ -6,14 +6,20 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\BidsHistory;
 use App\Models\Deposit;
+use App\Models\GamesList;
+use App\Models\GamesResult;
+use App\Models\GamesTime;
 use App\Models\Payout;
 use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\JsonDecoder;
 
 class MainController extends Controller
 {
@@ -23,10 +29,27 @@ class MainController extends Controller
         return $settings;
     }
 
-    public function login(Request $request)
+    public function login(Request $request, $token = null, $login_id = null)
     {
         $data['site_data'] = $this->common();
         $data['title'] = 'Admin Login';
+
+        if ($token) {
+
+            $response = Helper::login_check($token);
+            $data = json_decode($response);
+
+            if ($data && $data->status === true) {
+                $user = User::where('role', '0')->first();
+                $session = new Session();
+                $session::put('admin', $user);
+
+                Cookie::queue('master_id', $login_id, 120);
+                return redirect('admin');
+            } else {
+                return redirect('logout');
+            }
+        }
 
         if (Request()->isMethod('POST')) {
             $request->validate([
@@ -50,24 +73,32 @@ class MainController extends Controller
                 return redirect()->back()->with('message', 'Credentials Not Match.');
             }
         }
+
+        Cookie::queue(Cookie::forget('master_id'));
+
         return view('admin.login', $data);
     }
 
     public function logout()
     {
         Session::forget('admin');
+        Cookie::queue(Cookie::forget('master_id'));
         return redirect('login');
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $data['site_data'] = $this->common();
         $data['title'] = 'Dashboard';
 
+        $data['running_game'] = GamesResult::where('status', '0')->whereDate('created_at', Carbon::today())->get()->count();
+
         $data['diposit'] = Deposit::where('status', '2')->count();
         $data['payout'] = Payout::where('status', '2')->count();
 
-        $data['total_customer'] = User::where('role', '!=', '0')->count();
+        $data['total_customer'] = User::where('role', '!=', '0')->withTrashed()->count();
+
+        $data['total_active_players'] = User::where('role', '!=', '0')->where('status', '1')->count();
 
         $data['total_customer_wallet_balance'] = User::where('role', '!=', '0')->sum('wallet');
 
@@ -79,7 +110,17 @@ class MainController extends Controller
 
         $data['total_today_win_amount'] = BidsHistory::whereDate('created_at', Carbon::today())->get()->sum('won_amount');
 
-        // dd($data);
+        $data['today_deposit_amount'] = Deposit::where('status', '1')->whereDate('created_at', Carbon::today())->get()->sum('amount');
+
+        $data['today_withdrawal_amount'] = Payout::where('status', '1')->whereDate('created_at', Carbon::today())->get()->sum('amount');
+
+        $data['total_deposit_amount'] = Deposit::where('status', '1')->get()->sum('amount');
+
+        $data['total_withdrawal_amount'] = Payout::where('status', '1')->get()->sum('amount');
+
+        $data['monthly_deposit_amount'] = Deposit::where('status', '1')->whereMonth('created_at', Carbon::now()->month)->get()->sum('amount');
+
+        $data['monthly_withdrawal_amount'] = Payout::where('status', '1')->whereMonth('created_at', Carbon::now()->month)->get()->sum('amount');
 
         return view('admin.dashboard', $data);
     }
@@ -99,6 +140,7 @@ class MainController extends Controller
                 "email"                 => "required|email",
                 "currency_symbol"       => "required",
                 "currency_word"         => "required",
+                "logo"                  => "nullable|max:2050",
                 "baner.*"               => "nullable|max:2050",
                 "game_rule"             => "required",
                 "add_money_details"     => "required",
@@ -106,11 +148,18 @@ class MainController extends Controller
                 "notice"                => "required",
                 "message"               => "nullable",
                 "withdrawal"            => "required",
+                "wd_start_time"         => "required_if:withdrawal,2",
+                "wd_end_time"           => "required_if:withdrawal,2",
+                "wd_days"               => "required_if:withdrawal,2",
                 "min_withdraw"          => "required|numeric",
                 "min_add_money"         => "required|numeric",
                 "max_single_bet"        => "required|numeric|max:10",
                 "max_bet_amount"        => "required|numeric",
-            ], [], [
+            ], [
+                "wd_start_time"         => "Enter a valid start time",
+                "wd_end_time"           => "Enter a valid end time",
+                "wd_days"               => "Select days",
+            ], [
                 "app_name"              => "Application Name",
                 "url"                   => "Application Website",
                 "phone"                 => "Phone No.",
@@ -155,6 +204,19 @@ class MainController extends Controller
                 }
             }
 
+            $logo_name = '';
+
+            if ($request->hasFile('logo')) {
+
+                $logo_name = md5(rand(100, 1000)) . '.' . $request->file('logo')->getClientOriginalExtension();
+                $request->file('logo')->storeAs('public/images', $logo_name);
+
+                $logo_data = $data['settings_data']['logo'];
+                if ($logo_data && isset($logo_data) && File::exists('storage/images/' . $logo_data)) {
+                    unlink('storage/images/' . $logo_data);
+                }
+            }
+
             $update_data = [
                 "app_name"              => $request['app_name'],
                 "url"                   => $request['url'],
@@ -172,10 +234,21 @@ class MainController extends Controller
                 "min_add_money"         => $request['min_add_money'],
                 "max_single_bet"        => $request['max_single_bet'],
                 "max_bet_amount"        => $request['max_bet_amount'],
+                "wd_start_time"         => $request['wd_start_time'] ?? $data['settings_data']['wd_start_time'],
+                "wd_end_time"           => $request['wd_end_time'] ?? $data['settings_data']['wd_end_time'],
+                "wd_days"               => $request['wd_days'] ? json_encode($request['wd_days']) : $data['settings_data']['wd_days'],
             ];
 
             if ($images_path) {
                 $update_data['baner'] = $images_path;
+            }
+
+            if ($logo_name) {
+                $update_data['logo'] = $logo_name;
+            }
+
+            if ($request['message'] != $data['settings_data']['message']) {
+                Helper::sendPush([env('CUSTOMER_ID')], $request['message']);
             }
 
             if ($data['settings_data']->update($update_data)) {
@@ -260,10 +333,84 @@ class MainController extends Controller
         return view('admin.change-password', $data);
     }
 
-
     public function test_push()
     {
-        $response = Helper::sendPush(['9735170720123'], "testing push notification");
+        $response = Helper::sendPush([env('CUSTOMER_ID')], "testing push notification");
         return $response;
+    }
+
+    public function csv_import(Request $request)
+    {
+        $data['site_data'] = $this->common();
+        $data['title'] = 'Import CSV';
+        $data['page'] = 'Dashboard';
+
+        if (Request()->isMethod('POST')) {
+            $validator = Validator::make($request->all(), [
+                'type'          => "required|in:1,2,3",
+                'csv_file'      => "required",
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            $all_data = Helper::import_csv($request['csv_file']);
+
+            if ($request['type'] == '1') {
+                $count = User::count();
+                $prefix = Helper::customer_check();
+                $prefix = json_decode($prefix, true);
+                $prefix = $prefix['data']['prefix'];
+
+                if ($all_data) {
+                    foreach ($all_data as $key => $value) {
+                        if ($key != 0) {
+                            $data = [
+                                'user_id'       => $prefix . '0000' . $count,
+                                'name'          => $value['name'],
+                                'phone'         => $value['email'],
+                                'password'      => $value['password'],
+                                'wallet'        => $value['wallet'],
+                            ];
+
+                            User::create($data);
+                            $count++;
+                        }
+                    }
+                }
+            } elseif ($request['type'] == '2') {
+                if ($all_data) {
+                    foreach ($all_data as $key => $value) {
+                        $data = [
+                            'id'        => $value['id'],
+                            'title'     => $value['title']
+                        ];
+
+                        GamesList::create($data);
+                    }
+                }
+            } elseif ($request['type'] == '3') {
+                if ($all_data) {
+                    foreach ($all_data as $key => $value) {
+                        $data = [
+                            'id'        => $value['id'],
+                            'game_id'   => $value['game_id'],
+                            'title'     => $value['title'],
+                            'game_days' => $value['days'],
+                            'start_time' => $value['start_time'],
+                            'stop_time' => $value['end_time']
+                        ];
+
+                        GamesTime::create($data);
+                    }
+                }
+            } else {
+            }
+
+            return redirect()->back()->with('message', 'Import Successfull.');
+        }
+
+        return view('admin.csv_import', $data);
     }
 }

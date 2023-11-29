@@ -18,7 +18,7 @@ class LoginCheck
     public function handle(Request $request, Closure $next): Response
     {
         if (Session::has('admin')) {
-            return redirect()->back();
+            return redirect('admin');
         } else {
             return $next($request);
         }

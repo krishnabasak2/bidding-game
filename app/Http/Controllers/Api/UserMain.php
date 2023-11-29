@@ -12,6 +12,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Stmt\TryCatch;
 
@@ -33,7 +34,7 @@ class UserMain extends Controller
             }
 
             $count = User::count();
-            $request['password'] = md5(md5(md5($request['password'])));
+            $request['password'] = Hash::make($request['password']);
             $request['user_id'] = Helper::user_id($count, 4);
             $user = User::create($request->except('_token'));
             if ($user) {
@@ -63,7 +64,8 @@ class UserMain extends Controller
             $user = User::where('phone', $request['phone'])->first();
             if (!empty($user) && $user->status == '1') {
 
-                if (md5(md5(md5($request['password']))) == $user->password) {
+                // if (md5(md5(md5($request['password']))) == $user->password) {
+                if (Hash::check($request['password'], $user->password)) {
                     $token = $user->createToken('myApp')->plainTextToken;
                     return response()->json(['status' => true, 'token' => $token, 'message' => 'Login successful.', 'data' => null], 200);
                 } else {
@@ -95,7 +97,13 @@ class UserMain extends Controller
         try {
             $user = User::where(['id' => Auth::id(), 'status' => '1'])->first();
             if (!empty($user)) {
-                return response()->json(['status' => true, 'user' => $user, 200]);
+                $response = Helper::customer_check();
+                $response = json_decode($response);
+                if ($response->status === true) {
+                    return response()->json(['status' => true, 'user' => $user, 200]);
+                } else {
+                    return response()->json(['status' => false, 'user' => null, 400]);
+                }
             } else {
                 return response()->json(['status' => false, 'user' => null, 400]);
             }
@@ -181,7 +189,15 @@ class UserMain extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'txn_mode'             => 'required|in:1,2,3,4',
-                'payout_number'        => 'required',
+                'payout_number'        => 'required_if:txn_mode,1,2,3',
+                'ac_name'              => 'required_if:txn_mode,4',
+                'ac_number'            => 'required_if:txn_mode,4',
+                'ac_ifsc'              => 'required_if:txn_mode,4',
+            ], [], [
+                'txn_mode'              => 'Transaction Method',
+                'ac_number'             => 'Account Number',
+                'ac_name'               => 'Account Name',
+                'ac_ifsc'               => 'Account IFSC',
             ]);
 
             if ($validator->fails()) {
@@ -191,13 +207,13 @@ class UserMain extends Controller
             $payout_data = PayoutSetting::where('user_id', Auth::id())->first();
 
             if (!empty($payout_data)) {
-                $payout_data->update(['txn_mode' => $request['txn_mode'], 'payout_number' => $request['payout_number']]);
+                $payout_data->update(['txn_mode' => $request['txn_mode'], 'payout_number' => $request['payout_number'], 'ac_number' => $request['ac_number'], 'ac_name' => $request['ac_name'], 'ac_ifsc' => $request['ac_ifsc']]);
 
                 $payout_data = PayoutSetting::where('user_id', Auth::id())->first();
 
                 return response()->json(['status' => true, 'message' => 'Payout settings update successful.', 'data' => $payout_data], 200);
             } else {
-                PayoutSetting::create(['user_id' => Auth::id(), 'txn_mode' => $request['txn_mode'], 'payout_number' => $request['payout_number']]);
+                PayoutSetting::create(['user_id' => Auth::id(), 'txn_mode' => $request['txn_mode'], 'payout_number' => $request['payout_number'], 'ac_number' => $request['ac_number'], 'ac_name' => $request['ac_name'], 'ac_ifsc' => $request['ac_ifsc']]);
 
                 return response()->json(['status' => true, 'message' => 'Payout settings update successful.', 'data' => null], 201);
             }
@@ -275,7 +291,36 @@ class UserMain extends Controller
             $settings = SiteSetting::first();
             if ($settings->withdrawal == '0') {
                 return response()->json(['status' => false, 'message' => "Payout time is over.", 'data' => null], 400);
+            } else if ($settings->withdrawal == '2') {
+
+                $current_day = date("l");
+
+                $day = '';
+                if ($current_day == 'Monday') {
+                    $day = '1';
+                } elseif ($current_day == 'Tuesday') {
+                    $day = '2';
+                } elseif ($current_day == 'Wednesday') {
+                    $day = '3';
+                } elseif ($current_day == 'Thursday') {
+                    $day = '4';
+                } elseif ($current_day == 'Friday') {
+                    $day = '5';
+                } elseif ($current_day == 'Saturday') {
+                    $day = '6';
+                } elseif ($current_day == 'Sunday') {
+                    $day = '0';
+                }
+
+                $checkDay = SiteSetting::where('id', '1')->whereJsonContains('wd_days', $day)->first();
+
+                if (!empty($checkDay) && $settings->wd_start_time <= date('H:i', time()) && $settings->wd_end_time > date('H:i', time())) {
+                } else {
+                    return response()->json(['status' => false, 'message' => "Payout time is over.", 'data' => null], 400);
+                }
             }
+
+
             if ($settings->min_withdraw > $request['amount']) {
                 return response()->json(['status' => false, 'message' => "Minimum payout amount is {$settings->min_withdraw}", 'data' => null], 400);
             }
@@ -288,7 +333,11 @@ class UserMain extends Controller
             $txn_count = Transaction::count();
             $txn_id = Helper::txn_id($txn_count, 6, 'P');
 
-            $payout = Payout::create(['user_id' => Auth::id(), 'amount' => $request['amount'], 'txn_id' => $txn_id, 'txn_number' => $user->payout_settings->payout_number, 'txn_method' => $user->payout_settings->txn_mode]);
+            if ($user->payout_settings->txn_mode == '4') {
+                $payout = Payout::create(['user_id' => Auth::id(), 'amount' => $request['amount'], 'txn_id' => $txn_id, 'txn_method' => $user->payout_settings->txn_mode, 'ac_name' => $user->payout_settings->ac_name, 'ac_number' => $user->payout_settings->ac_number, 'ac_ifsc' => $user->payout_settings->ac_ifsc]);
+            } else {
+                $payout = Payout::create(['user_id' => Auth::id(), 'amount' => $request['amount'], 'txn_id' => $txn_id, 'txn_number' => $user->payout_settings->payout_number, 'txn_method' => $user->payout_settings->txn_mode]);
+            }
 
             if ($payout) {
 

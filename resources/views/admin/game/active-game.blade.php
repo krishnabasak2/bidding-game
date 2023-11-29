@@ -49,7 +49,7 @@
                                                 @foreach ($data_list as $key => $data)
                                                     <tr>
                                                         <td>{{ $key + 1 }}</td>
-                                                        <td>{{ $data->title}}</td>
+                                                        <td>{{ $data->title }}</td>
                                                         <td>
                                                             <a href="{{ url('/') }}/admin/game/active/{{ $data['id'] }}"
                                                                 class="btn btn-icon btn-primary btn-icon-style-1"

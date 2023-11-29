@@ -12,8 +12,8 @@
     <link rel="stylesheet"
         href="{{ asset('assets/admin/vendors/datatables.net-responsive-dt/css/responsive.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/common/toastr/toastr.min.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('assets/admin/css/style.css') }}">
-    @stack('page-style');
 </head>
 
 <body>
@@ -103,11 +103,13 @@
                                                 Games List</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url('/') }}/admin/game/list/active">Active
+                                            <a class="nav-link"
+                                                href="{{ url('/') }}/admin/game/list/active">Active
                                                 Games</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url('/') }}/admin/game/list/inactive">Inactive
+                                            <a class="nav-link"
+                                                href="{{ url('/') }}/admin/game/list/inactive">Inactive
                                                 Games</a>
                                         </li>
                                     </ul>
@@ -133,11 +135,13 @@
                                                 Users List</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url('/') }}/admin/user/list/active">Active
+                                            <a class="nav-link"
+                                                href="{{ url('/') }}/admin/user/list/active">Active
                                                 Users</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url('/') }}/admin/user/list/suspend">Suspend
+                                            <a class="nav-link"
+                                                href="{{ url('/') }}/admin/user/list/suspend">Suspend
                                                 Users</a>
                                         </li>
                                     </ul>
@@ -155,7 +159,8 @@
                                 <li class="nav-item">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url('/') }}/admin/wallet/deposit/request">New
+                                            <a class="nav-link"
+                                                href="{{ url('/') }}/admin/wallet/deposit/request">New
                                                 Requests Deposits</a>
                                         </li>
                                         <li class="nav-item">
@@ -183,7 +188,8 @@
                                 <li class="nav-item">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url('/') }}/admin/wallet/payout/request">New
+                                            <a class="nav-link"
+                                                href="{{ url('/') }}/admin/wallet/payout/request">New
                                                 Requests Payouts</a>
                                         </li>
                                         <li class="nav-item">
@@ -193,7 +199,8 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link"
-                                                href="{{ url('/') }}/admin/wallet/payout/rejected">Rejected Payouts</a>
+                                                href="{{ url('/') }}/admin/wallet/payout/rejected">Rejected
+                                                Payouts</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -237,11 +244,13 @@
                                 <li class="nav-item">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url('/') }}/admin/user/list/trash">Removed
+                                            <a class="nav-link"
+                                                href="{{ url('/') }}/admin/user/list/trash">Removed
                                                 Users</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url('/') }}/admin/game/list/trash">Removed
+                                            <a class="nav-link"
+                                                href="{{ url('/') }}/admin/game/list/trash">Removed
                                                 Gmaes</a>
                                         </li>
                                     </ul>
@@ -293,11 +302,12 @@
     <script src="{{ asset('assets/admin/vendors/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
     <script src="{{ asset('assets/admin/vendors/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assets/admin/vendors/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}">
-    </script>
+    <script src="{{ asset('assets/admin/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('assets/admin/js/dataTables-data.js') }}"></script>
     <script src="{{ asset('assets/admin/js/init.js') }}"></script>
     <script src="{{ asset('assets/admin/js/select2-data.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @stack('page-scripts')
 </body>
 

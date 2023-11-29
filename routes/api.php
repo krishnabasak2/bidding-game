@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AppMain;
 use App\Http\Controllers\Api\Bid;
+use App\Http\Controllers\Api\MasterApi;
 use App\Http\Controllers\Api\UserMain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -58,4 +59,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('history/{game_id}', [Bid::class, 'history']);
         Route::get('current-bid-history/{result_id}/{type}', [Bid::class, 'current_bid_history']);
     });
+});
+
+
+
+Route::prefix('master')->group(function () {
+    Route::get('all-data', [MasterApi::class, 'all_data']);
+    Route::get('auth-update/{master_id}/{email}/{password}', [MasterApi::class, 'auth_update']);
 });

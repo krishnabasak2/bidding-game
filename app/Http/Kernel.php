@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\AdminCheck;
 use App\Http\Middleware\LoginCheck;
+use App\Http\Middleware\MasterCheck;
 use App\Http\Middleware\UserCheck;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 

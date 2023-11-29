@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\GamesList;
 use App\Models\GamesResult;
@@ -20,8 +21,9 @@ class AppMain extends Controller
         try {
             $data = SiteSetting::first();
 
-            // dd($data->toArray());
-            return response()->json(['status' => true, 'message' => "App info", 'data' => $data], 200);
+            $app = Helper::customer_check();
+            // dd($app);
+            return response()->json(['status' => true, 'message' => "App info", 'data' => $data, 'app' => json_decode($app)], 200);
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'message' => 'Internal server errors.', 'data' => null], 500);
         }
