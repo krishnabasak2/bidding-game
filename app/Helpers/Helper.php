@@ -8,7 +8,6 @@ use App\Models\User;
 
 class Helper
 {
-
     public static function user_id($user_id, $length)
     {
         $prefix_zero = NULL;
@@ -19,7 +18,10 @@ class Helper
             $prefix_zero = $prefix_zero . '0';
         }
 
-        return "BG" . $prefix_zero . $user_id;
+        $prefix = self::customer_check();
+        $prefix = json_decode($prefix, true);
+        $prefix = $prefix['data']['prefix'];
+        return $prefix . $prefix_zero . $user_id;
     }
 
     public static function txn_id($txn_id, $length, $pre)
@@ -32,7 +34,10 @@ class Helper
             $prefix_zero = $prefix_zero . '0';
         }
 
-        return "BG" . $pre . $prefix_zero . $txn_id;
+        $prefix = self::customer_check();
+        $prefix = json_decode($prefix, true);
+        $prefix = $prefix['data']['prefix'];
+        return $prefix . $pre . $prefix_zero . $txn_id;
     }
 
 
@@ -68,7 +73,12 @@ class Helper
         }
 
         if ($user->update(['wallet' => $balance])) {
-            self::transaction($user_id, rand(100000, 999999), $amount, $type, $for, $balance, $remarks);
+            $prefix = self::customer_check();
+            $prefix = json_decode($prefix, true);
+            $prefix = $prefix['data']['prefix'];
+
+            $tranId = $prefix . rand(100000, 999999);
+            self::transaction($user_id, $tranId, $amount, $type, $for, $balance, $remarks);
             return true;
         } else {
             return false;
@@ -104,6 +114,93 @@ class Helper
             $response = curl_exec($ch);
             curl_close($ch);
             return $response;
+        }
+    }
+
+    public static function login_check($token)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => env('MASTER_URL') . '/api/login-check/' . env('CUSTOMER_ID') . '/' . $token,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        return $response;
+    }
+
+    public static function customer_check()
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => env('MASTER_URL') . '/api/customer/get/' . env('CUSTOMER_ID'),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        return $response;
+    }
+
+    public static function master_check($master_id)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => env('MASTER_URL') . "/api/customer/master-id-check/" . $master_id,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        return $response;
+    }
+
+    public static function import_csv($csv_file)
+    {
+        if ((file_exists($csv_file)) and (is_readable($csv_file))) {
+            if (($file = fopen($csv_file, 'r')) != FALSE) {
+                $index = FALSE;
+
+                while (($value = fgetcsv($file)) != FALSE) {
+                    if (!$index) {
+                        $index = str_replace('"', NULL, $value);
+                    } else {
+                        $data[] = array_combine($index, $value);
+                    }
+                }
+
+                fclose($file);
+                return $data;
+            } else {
+                return NULL;
+            }
+        } else {
+            return NULL;
         }
     }
 }

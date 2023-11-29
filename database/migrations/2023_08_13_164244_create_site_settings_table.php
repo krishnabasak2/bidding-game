@@ -27,7 +27,10 @@ return new class extends Migration
             $table->longText('withdrawal_details')->nullable();
             $table->text('notice')->nullable();
             $table->text('message')->nullable();
-            $table->set('withdrawal', ['0', '1'])->default('1')->comment('0:Off, 1:On');
+            $table->set('withdrawal', ['0', '1', '2'])->default('1')->comment('0:Off, 1:On, 2:Custom');
+            $table->text('wd_start_time')->nullable();
+            $table->text('wd_end_time')->nullable();
+            $table->text('game_days')->nullable();
             $table->decimal('min_withdraw', 10, 2)->nullable();
             $table->decimal('min_add_money', 10, 2)->nullable();
             $table->integer('max_single_bet')->nullable();

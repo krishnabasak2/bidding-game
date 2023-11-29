@@ -26,12 +26,27 @@
                     <div class="hk-row">
                         <div class="col-lg-12">
                             <div class="hk-row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
+                                    <div class="card card-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-dark font-weight-500">Running Games</span>
+                                            </div>
+                                            <span class="d-block display-5 text-dark mb-5">
+                                                {{ $running_game }}
+                                            </span>
+                                            <a href="{{ url('/') }}/admin/game/active">
+                                                <span class="d-block badge badge-success">View</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
                                     <div class="card card-sm">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between mb-5">
                                                 <span class="d-block font-15 text-dark font-weight-500">Payout
-                                                    Request</span>
+                                                    Requests</span>
                                                 {{-- <span class="badge badge-info badge-sm">00</span> --}}
                                             </div>
                                             <span class="d-block display-5 text-dark mb-5">
@@ -43,19 +58,20 @@
                                                 </a>
                                             @else
                                                 <a href="#">
-                                                    <span class="d-block badge badge-info" style="background-color: #c9c9c9b2
+                                                    <span class="d-block badge badge-info"
+                                                        style="background-color: #c9c9c9b2
                                                     ">View</span>
                                                 </a>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div class="card card-sm">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between mb-5">
                                                 <span class="d-block font-15 text-dark font-weight-500">Deposit
-                                                    Request</span>
+                                                    Requests</span>
                                                 {{-- <span class="badge badge-success badge-sm">00</span> --}}
                                             </div>
                                             <span class="d-block display-5 text-dark mb-5">
@@ -66,10 +82,11 @@
                                                     <span class="d-block badge badge-success">View</span>
                                                 </a>
                                             @else
-                                            <a href="#">
-                                                <span class="d-block badge badge-info" style="background-color: #c9c9c9b2
+                                                <a href="#">
+                                                    <span class="d-block badge badge-info"
+                                                        style="background-color: #c9c9c9b2
                                                 ">View</span>
-                                            </a>
+                                                </a>
                                             @endif
                                         </div>
                                     </div>
@@ -83,7 +100,7 @@
                                         <div class="card-body bg-gradient-info">
                                             <div class="d-flex justify-content-between mb-5">
                                                 <span class="d-block font-15 text-white font-weight-500">Total
-                                                    Customers</span>
+                                                    Players</span>
                                             </div>
                                             <span class="d-block display-5 text-white mb-5">{{ $total_customer }}</span>
                                         </div>
@@ -93,11 +110,25 @@
                                     <div class="card card-sm">
                                         <div class="card-body bg-gradient-success">
                                             <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Customers Wallwt
+                                                <span class="d-block font-15 text-white font-weight-500">Total Wallet
                                                     Balance</span>
                                             </div>
                                             <span
-                                                class="d-block display-5 text-white mb-5">{{ $total_customer_wallet_balance }}</span>
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $total_customer_wallet_balance }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-info">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Today Bid
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $total_today_bid_amount }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -109,7 +140,25 @@
                                                     Amount</span>
                                             </div>
                                             <span
-                                                class="d-block display-5 text-white mb-5">{{ $total_monthly_bid_amount }}</span>
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $total_monthly_bid_amount }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="hk-row">
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-success">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Today Win
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $total_today_win_amount }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -121,35 +170,8 @@
                                                     Amount</span>
                                             </div>
                                             <span
-                                                class="d-block display-5 text-white mb-5">{{ $total_monthly_win_amount }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="hk-row">
-                                <div class="col-sm-3">
-                                    <div class="card card-sm">
-                                        <div class="card-body bg-info">
-                                            <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Today Bid
-                                                    Amount</span>
-                                            </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $total_today_bid_amount }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="card card-sm">
-                                        <div class="card-body bg-success">
-                                            <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Today Win
-                                                    Amount</span>
-                                            </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $total_today_win_amount }}</span>
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $total_monthly_win_amount }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -157,10 +179,64 @@
                                     <div class="card card-sm">
                                         <div class="card-body bg-warning">
                                             <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Inactive
-                                                    Properties</span>
+                                                <span class="d-block font-15 text-white font-weight-500">Today Deposit
+                                                    Amount</span>
                                             </div>
-                                            <span class="d-block display-5 text-white mb-5">00</span>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $today_deposit_amount }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-gradient-success">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Monthly Deposit
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $monthly_deposit_amount }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-info">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Total Deposit
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $total_deposit_amount }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-success">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Today Withdrawal
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $today_withdrawal_amount }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-info">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Monthly Withdrawal
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $monthly_withdrawal_amount }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -168,10 +244,12 @@
                                     <div class="card card-sm">
                                         <div class="card-body bg-danger">
                                             <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Removed
-                                                    Properties</span>
+                                                <span class="d-block font-15 text-white font-weight-500">Total Withdrawal
+                                                    Amount</span>
                                             </div>
-                                            <span class="d-block display-5 text-white mb-5">00</span>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $total_withdrawal_amount }}</span>
                                         </div>
                                     </div>
                                 </div>

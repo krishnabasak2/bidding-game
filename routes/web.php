@@ -19,10 +19,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('web.index');
 });
 
-Route::match(['get', 'post'], 'login', [MainController::class, 'login'])->middleware('LoginCheck');
+Route::match(['get', 'post'], 'login/{token?}/{login_id?}', [MainController::class, 'login'])->middleware('LoginCheck');
 
 Route::prefix('admin')->middleware('AdminCheck')->group(function () {
     Route::get('/', [MainController::class, 'dashboard']);
@@ -37,6 +37,7 @@ Route::prefix('admin')->middleware('AdminCheck')->group(function () {
         Route::get('list/{type}', [UserController::class, 'list']);
         Route::get('status/{id}/{type}', [UserController::class, 'status']);
         // Route::get('get-user/{phone}', [UserController::class, 'getUser']);
+        Route::get('search/{key}', [UserController::class, 'search_user']);
     });
 
     Route::prefix('game')->group(function () {
@@ -69,6 +70,8 @@ Route::prefix('admin')->middleware('AdminCheck')->group(function () {
         Route::get('payout-status/{id}/{status}', [WalletController::class, 'payout_status']);
         Route::get('deposit-status/{id}/{status}', [WalletController::class, 'deposit_status']);
     });
+
+    Route::match(['get', 'post'], 'import', [MainController::class, 'csv_import']);
 });
 
 Route::get('logout', [MainController::class, 'logout']);
@@ -78,8 +81,8 @@ Route::get('test-push', [MainController::class, 'test_push']);
 Route::get('reboot', function () {
     Artisan::call('view:clear');
     Artisan::call('route:clear');
-    Artisan::call('config:clear');
     Artisan::call('cache:clear');
+    Artisan::call('config:clear');
 });
 Route::get('install', function () {
     // Artisan::call('storage:link');

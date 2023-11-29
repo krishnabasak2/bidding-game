@@ -18,6 +18,7 @@ class WalletController extends Controller
         $data['site_data'] = $mainController->common();
         $data['page'] = 'Dashboard';
         $data['title'] = 'Transaction';
+        $data['users'] = User::where('role', '1')->withTrashed()->get();
 
         if (Request()->isMethod('POST')) {
             $validator = Validator::make($request->all(), [
@@ -56,6 +57,7 @@ class WalletController extends Controller
         $data['site_data'] = $mainController->common();
         $data['page'] = 'Dashboard';
         $data['title'] = 'Wallet History';
+        $data['users'] = User::where('role', '1')->withTrashed()->get();
         $data['data_list'] = [];
 
         if (Request()->isMethod('POST')) {

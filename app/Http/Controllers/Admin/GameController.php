@@ -402,7 +402,7 @@ class GameController extends Controller
 
                 $notification = "Result: $game_name - $game_time - (SINGLE = $single_num) - (PATTI = $patti_num) - (JODI = $jora_num)";
 
-                Helper::sendPush(['9735170720123'], $notification);
+                Helper::sendPush([env('CUSTOMER_ID')], $notification);
 
                 return redirect("/admin/game/active/{$game_result->game_id}")->with('message', 'Result Has Been Updated Successfully.');
             } else {

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->bigInteger('txn_id')->nullable();
+            $table->text('txn_id')->nullable();
             $table->decimal('amount', 10, 2)->default(0);
             $table->set('type', ['0', '1'])->nullable()->comment('0:debit, 1:credit');
             $table->set('status', ['0', '1', '2', '3', '4', '5'])->nullable()->comment('0:Bidding, 1:Winning, 2:Deposit, 3:Payout, 4:Admin Debit, 5:Admin Credit');
