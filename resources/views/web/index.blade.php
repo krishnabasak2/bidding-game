@@ -53,8 +53,8 @@
 
                         <a href="#contact" class="nav-item nav-link">Contact</a>
                     </div>
-                    <a href="tel:+918240457455"
-                        class="btn btn-primary-gradient rounded-pill py-2 px-4 ms-3 d-none d-lg-block">8240457455</a>
+                    <a href="tel:+91{{ $phone }}"
+                        class="btn btn-primary-gradient rounded-pill py-2 px-4 ms-3 d-none d-lg-block">{{ $phone }}</a>
                 </div>
             </nav>
 
@@ -65,10 +65,10 @@
                             <h1 style="margin-top:30px !important" class="text-white mb-4 animated slideInDown">WELCOME
                                 TO {{ env('APP_NAME') }}</h1>
                             <p class="text-white pb-3 animated slideInDown">Overall Customer Satisfaction 100 % </p>
-                            <a href="app.apk"
+                            <a href="{{ $app_link }}"
                                 class="btn btn-primary-gradient py-sm-3 px-4 px-sm-5 rounded-pill me-3 animated slideInLeft">Download</a>
                             <a href="#"
-                                class="btn btn-secondary-gradient py-sm-3 px-4 px-sm-5 rounded-pill animated slideInRight">8240457455</a>
+                                class="btn btn-secondary-gradient py-sm-3 px-4 px-sm-5 rounded-pill animated slideInRight">{{$phone}}</a>
                         </div>
                         <div class="col-lg-4 d-flex justify-content-center justify-content-lg-end wow fadeInUp"
                             data-wow-delay="0.3s"

@@ -356,7 +356,7 @@ class UserMain extends Controller
     public function deposit_list()
     {
         try {
-            $data = Deposit::where('user_id', Auth::id())->orderBy('id', 'DESC')->paginate(20);
+            $data = Deposit::where('user_id', Auth::id())->orderBy('id', 'DESC')->paginate(200);
 
             // dd($data->toArray());
             return response()->json(['status' => true, 'message' => "Deposit list", 'data' => $data], 200);
@@ -369,7 +369,7 @@ class UserMain extends Controller
     public function payout_list()
     {
         try {
-            $data = Payout::where('user_id', Auth::id())->orderBy('id', 'DESC')->paginate(20);
+            $data = Payout::where('user_id', Auth::id())->orderBy('id', 'DESC')->paginate(200);
 
             // dd($data->toArray());
             return response()->json(['status' => true, 'message' => "Payout list", 'data' => $data], 200);

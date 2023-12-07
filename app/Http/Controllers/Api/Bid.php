@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\BidsHistory;
+use App\Models\GamesList;
 use App\Models\GamesResult;
 use App\Models\SiteSetting;
 use App\Models\User;
@@ -149,8 +150,9 @@ class Bid extends Controller
     public function history($game_id, $result_id = null)
     {
         try {
-            $data = BidsHistory::where(['user_id' => Auth::id(), 'game_id' => $game_id])->orderBy('id', 'DESC')->paginate(20);
-            return response()->json(['status' => true, 'message' => "Transaction list", 'data' => $data], 200);
+            $game_title = GamesList::select('title')->where('id', $game_id)->first();
+            $data = BidsHistory::where(['user_id' => Auth::id(), 'game_id' => $game_id])->orderBy('id', 'DESC')->with('time')->paginate(200);
+            return response()->json(['status' => true, 'message' => "Transaction list", 'data' => $data, 'game_title' => $game_title], 200);
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'message' => 'Internal server errors.', 'data' => null], 500);
         }

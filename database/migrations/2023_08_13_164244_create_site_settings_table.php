@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('email')->nullable();
             $table->text('currency_word')->nullable();
             $table->text('currency_symbol')->nullable();
+            $table->text('currency_icon')->nullable();
             $table->longText('logo')->nullable();
             $table->longText('baner')->nullable();
             $table->longText('game_rule')->nullable();
@@ -30,7 +31,7 @@ return new class extends Migration
             $table->set('withdrawal', ['0', '1', '2'])->default('1')->comment('0:Off, 1:On, 2:Custom');
             $table->text('wd_start_time')->nullable();
             $table->text('wd_end_time')->nullable();
-            $table->text('game_days')->nullable();
+            $table->text('wd_days')->nullable();
             $table->decimal('min_withdraw', 10, 2)->nullable();
             $table->decimal('min_add_money', 10, 2)->nullable();
             $table->integer('max_single_bet')->nullable();

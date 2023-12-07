@@ -62,7 +62,7 @@
                                                             Current Wallet: ₹ {{ $data_list[0]['user']['wallet'] }}
                                                         </th>
                                                         <td>{{ $data['txn_id'] ?? 'N/A' }}</td>
-                                                        <td>₹ {{ $data['amount'] }}</td>
+                                                        <td>{{ $site_data->currency_symbol }} {{ $data['amount'] }}</td>
                                                         <td>
                                                             {{ $data['txn_number'] ?? 'N/A' }}
                                                             @if ($data['txn_method'] == '1')

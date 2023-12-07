@@ -45,7 +45,7 @@
                                             <div class="form-group">
                                                 <label>Application Name <strong class="text-danger">*</strong></label>
                                                 <input type="text" class="form-control" name="app_name"
-                                                    value="@if (!empty($settings_data)) {{ $settings_data->app_name }}@else{{ old('app_name') }} @endif"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->app_name }}@else{{ old('app_name') }} @endif"
                                                     required>
                                             </div>
                                         </div>
@@ -53,7 +53,7 @@
                                             <div class="form-group">
                                                 <label>Application Website <strong class="text-danger">*</strong></label>
                                                 <input type="text" class="form-control" name="url"
-                                                    value="@if (!empty($settings_data)) {{ $settings_data->url }}@else{{ old('url') }} @endif"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->url }}@else{{ old('url') }} @endif"
                                                     required>
                                             </div>
                                         </div>
@@ -61,7 +61,7 @@
                                             <div class="form-group">
                                                 <label>Contact Phone <strong class="text-danger">*</strong></label>
                                                 <input type="text" class="form-control" name="phone"
-                                                    value="@if (!empty($settings_data)) {{ $settings_data->phone }}@else{{ old('phone') }} @endif"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->phone }}@else{{ old('phone') }} @endif"
                                                     required>
                                             </div>
                                         </div>
@@ -69,34 +69,41 @@
                                             <div class="form-group">
                                                 <label>Contact Email <strong class="text-danger">*</strong></label>
                                                 <input type="email" class="form-control" name="email"
-                                                    value="@if (!empty($settings_data)) {{ $settings_data->email }}@else{{ old('email') }} @endif"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->email }}@else{{ old('email') }} @endif"
                                                     required>
                                             </div>
                                         </div>
 
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Currency In Word <strong class="text-danger">*</strong></label>
                                                 <input type="text" class="form-control" name="currency_word"
-                                                    value="@if (!empty($settings_data)) {{ $settings_data->currency_word }}@else{{ old('currency_word') }} @endif"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->currency_word }}@else{{ old('currency_word') }} @endif"
                                                     required>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Currency In Symbol <strong class="text-danger">*</strong></label>
                                                 <input type="text" class="form-control" name="currency_symbol"
-                                                    value="@if (!empty($settings_data)) {{ $settings_data->currency_symbol }}@else{{ old('currency_symbol') }} @endif"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->currency_symbol }}@else{{ old('currency_symbol') }} @endif"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Currency In Icon <strong class="text-danger">*</strong></label>
+                                                <input type="text" class="form-control" name="currency_icon"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->currency_icon }}@else{{ old('currency_icon') }} @endif"
                                                     required>
                                             </div>
                                         </div>
 
 
-
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Application Logo <strong class="text-danger">*</strong></label>
+                                                <label>Application Logo <small>(450px*120px)</small><strong class="text-danger">*</strong></label>
                                                 <input type="file" class="form-control" name="logo" multiple>
                                             </div>
                                         </div>
@@ -111,7 +118,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Welcome Banners <strong class="text-danger">*</strong></label>
+                                                <label>Welcome Banners <small>(800px*400px)</small><strong class="text-danger">*</strong></label>
                                                 <input type="file" class="form-control" name="baner[]" multiple>
                                             </div>
                                         </div>
@@ -134,8 +141,7 @@
                                             <div class="form-group">
                                                 <label>Game Rules <strong class="text-danger">*</strong></label>
                                                 <textarea id="gameRules" class="form-control" name="game_rule" required>
-                                                    @if (!empty($settings_data))
-{{ $settings_data->game_rule }}@else{{ old('game_rule') }}
+                                                    @if (!empty($settings_data)){{ $settings_data->game_rule }}@else{{ old('game_rule') }}
 @endif
                                                 </textarea>
                                             </div>
@@ -144,8 +150,7 @@
                                             <div class="form-group">
                                                 <label>Deposit Details <strong class="text-danger">*</strong></label>
                                                 <textarea id="add_money_details" class="form-control" name="add_money_details" required>
-                                                    @if (!empty($settings_data))
-{{ $settings_data->add_money_details }}@else{{ old('add_money_details') }}
+                                                    @if (!empty($settings_data)){{ $settings_data->add_money_details }}@else{{ old('add_money_details') }}
 @endif
                                                 </textarea>
                                             </div>
@@ -154,8 +159,7 @@
                                             <div class="form-group">
                                                 <label>Withdrawal Details <strong class="text-danger">*</strong></label>
                                                 <textarea id="withdrawal_details" class="form-control" name="withdrawal_details" required>
-                                                    @if (!empty($settings_data))
-{{ $settings_data->withdrawal_details }}@else{{ old('withdrawal_details') }}
+                                                    @if (!empty($settings_data)){{ $settings_data->withdrawal_details }}@else{{ old('withdrawal_details') }}
 @endif
                                                 </textarea>
                                             </div>
@@ -164,8 +168,7 @@
                                             <div class="form-group">
                                                 <label>Notice <strong class="text-danger">*</strong></label>
                                                 <textarea class="form-control" name="notice" required>
-@if (!empty($settings_data))
-{{ $settings_data->notice }}@else{{ old('notice') }}
+@if (!empty($settings_data)){{ $settings_data->notice }}@else{{ old('notice') }}
 @endif
 </textarea>
                                             </div>
@@ -174,8 +177,7 @@
                                             <div class="form-group">
                                                 <label>Message</label>
                                                 <textarea class="form-control" name="message">
-@if (!empty($settings_data))
-{{ $settings_data->message }}@else{{ old('message') }}
+@if (!empty($settings_data)){{ $settings_data->message }}@else{{ old('message') }}
 @endif
 </textarea>
                                             </div>

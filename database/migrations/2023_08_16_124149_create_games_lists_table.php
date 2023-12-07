@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('games_lists', function (Blueprint $table) {
             $table->id();
             $table->text('title')->nullable();
+            $table->string('icon')->nullable();
             $table->decimal('patti_win_value', 10, 2)->nullable();
             $table->decimal('jodi_win_value', 10, 2)->nullable();
             $table->decimal('single_win_value', 10, 2)->nullable();

@@ -140,6 +140,7 @@ class MainController extends Controller
                 "email"                 => "required|email",
                 "currency_symbol"       => "required",
                 "currency_word"         => "required",
+                "currency_icon"         => "required",
                 "logo"                  => "nullable|max:2050",
                 "baner.*"               => "nullable|max:2050",
                 "game_rule"             => "required",
@@ -166,6 +167,7 @@ class MainController extends Controller
                 "email"                 => "Email ID",
                 "currency_symbol"       => "Currency Symbol",
                 "currency_word"         => "Currency Word",
+                "currency_icon"         => "Currency Icon",
                 "baner"                 => "Welcome Banners",
                 "game_rule"             => "Game Rule",
                 "add_money_details"     => "Deposit Details",
@@ -224,6 +226,7 @@ class MainController extends Controller
                 "email"                 => $request['email'],
                 "currency_symbol"       => $request['currency_symbol'],
                 "currency_word"         => $request['currency_word'],
+                "currency_icon"         => $request['currency_icon'],
                 "game_rule"             => $request['game_rule'],
                 "add_money_details"     => $request['add_money_details'],
                 "withdrawal_details"    => $request['withdrawal_details'],
@@ -393,6 +396,9 @@ class MainController extends Controller
             } elseif ($request['type'] == '3') {
                 if ($all_data) {
                     foreach ($all_data as $key => $value) {
+
+                        GamesList::where('id', $value['game_id'])->update(['patti_win_value' => $value['patti_win_amount'], 'jodi_win_value' => $value['jora_win_amount'], 'single_win_value' => $value['single_win_amount']]);
+
                         $data = [
                             'id'        => $value['id'],
                             'game_id'   => $value['game_id'],

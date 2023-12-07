@@ -71,7 +71,7 @@
                                                         Suspend</option>
                                                 </select>
                                             </td>
-                                            <td>₹ {{ $data['wallet'] }}</td>
+                                            <td>{{ $site_data->currency_symbol }} {{ $data['wallet'] }}</td>
                                             <td>
                                                 {{ date('M j, Y - h:i:s a', strtotime($data['created_at'])) }}
                                             </td>
