@@ -12,7 +12,7 @@ class GamesList extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['title', 'single_win_value', 'patti_win_value', 'jodi_win_value', 'cp_win_value', 'status'];
+    protected $fillable = ['title', 'icon', 'single_win_value', 'patti_win_value', 'jodi_win_value', 'cp_win_value', 'status'];
 
     public function getTime(): HasMany
     {

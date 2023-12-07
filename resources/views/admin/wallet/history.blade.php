@@ -106,7 +106,7 @@
                                                     <tr>
                                                         <td>{{ $key + 1 }}</td>
                                                         <td>{{ $data['txn_id'] }}</td>
-                                                        <td>₹ {{ $data['amount'] }}</td>
+                                                        <td>{{ $site_data->currency_symbol }} {{ $data['amount'] }}</td>
                                                         <td>
                                                             {{ $data['type'] == '0' ? 'Debited' : 'Credited' }}
                                                         </td>
@@ -121,7 +121,7 @@
                                                                 ? 'Payout'
                                                                 : 'By Admin' }}
                                                         </td>
-                                                        <td>₹ {{ $data['current_balance'] }}</td>
+                                                        <td>{{ $site_data->currency_symbol }} {{ $data['current_balance'] }}</td>
                                                         <td>
                                                             {{ date('M j, Y - h:i:s a', strtotime($data['created_at'])) }}
                                                         </td>

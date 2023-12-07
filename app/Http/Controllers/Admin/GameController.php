@@ -13,6 +13,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -32,6 +33,7 @@ class GameController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'title'             => 'required',
+                'icon'              => 'required|max:2050|dimensions:max_width=200,max_height=201',
                 'single_win_value'  => 'required|numeric',
                 'patti_win_value'   => 'required|numeric',
                 'jodi_win_value'    => 'required|numeric',
@@ -48,7 +50,20 @@ class GameController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            if (GamesList::create($request->except('_token'))) {
+            $post_data = $request->except('_token');
+
+            $icon_name = '';
+
+            if ($request->hasFile('icon')) {
+                $icon_name = md5(rand(100, 1000)) . '.' . $request->file('icon')->getClientOriginalExtension();
+                $request->file('icon')->storeAs('public/images', $icon_name);
+            }
+
+            $post_data['icon'] = $icon_name;
+
+            // dd($post_data);
+
+            if (GamesList::create($post_data)) {
                 return redirect()->back()->with('message', "Game Has Been Created Successully.");
             } else {
                 return redirect()->back()->with('message', 'Something Went Wrong.');
@@ -71,6 +86,7 @@ class GameController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'title'             => 'required',
+                'icon'              => 'nullable|max:2050|dimensions:max_width=200,max_height=201',
                 'single_win_value'  => 'required|numeric',
                 'patti_win_value'   => 'required|numeric',
                 'jodi_win_value'    => 'required|numeric',
@@ -87,7 +103,24 @@ class GameController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            if ($game_data->update($request->except('_token'))) {
+            $post_data = $request->except('_token');
+
+            $icon_name = $game_data['icon'];
+
+            if ($request->hasFile('icon')) {
+
+                $icon_name = md5(rand(100, 1000)) . '.' . $request->file('icon')->getClientOriginalExtension();
+                $request->file('icon')->storeAs('public/images', $icon_name);
+
+                $icon_data = $game_data['icon'];
+                if ($icon_data && isset($icon_data) && File::exists('storage/images/' . $icon_data)) {
+                    unlink('storage/images/' . $icon_data);
+                }
+            }
+
+            $post_data['icon'] = $icon_name;
+
+            if ($game_data->update($post_data)) {
                 return redirect()->back()->with('message', "Game Has Been Updated Successully.");
             } else {
                 return redirect()->back()->with('message', 'Something Went Wrong.');

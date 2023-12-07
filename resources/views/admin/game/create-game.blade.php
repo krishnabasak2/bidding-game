@@ -38,16 +38,26 @@
                         {{-- <h3 class="pb-3">Application Settings</h3> --}}
                         <div class="row">
                             <div class="col-sm">
-                                <form action="" method="post">
+                                <form action="" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Game Title<strong class="text-danger">*</strong></label>
                                                 <input type="text" placeholder="Game Title" class="form-control"
                                                     name="title"
-                                                    value="{{ old('title', $game_data ? $game_data->title : '') }}" required>
+                                                    value="{{ old('title', $game_data ? $game_data->title : '') }}"
+                                                    required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Game Icon <small>(200px*200px)</small><strong
+                                                        class="text-danger">{{ $game_data ? '' : '*' }}</strong></label>
+                                                <input type="file" class="form-control" name="icon"
+                                                    {{ $game_data ? '' : 'required' }}>
                                             </div>
                                         </div>
 
@@ -56,7 +66,8 @@
                                                 <label>Single Win Value<strong class="text-danger">*</strong></label>
                                                 <input type="number" step="0.01" class="form-control"
                                                     name="single_win_value" placeholder="eg, 90"
-                                                    value="{{ old('single_win_value', $game_data ? $game_data->single_win_value : '') }}" required>
+                                                    value="{{ old('single_win_value', $game_data ? $game_data->single_win_value : '') }}"
+                                                    required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -64,7 +75,8 @@
                                                 <label>Patti Win Value<strong class="text-danger">*</strong></label>
                                                 <input type="number" step="0.01" class="form-control"
                                                     name="patti_win_value" placeholder="eg, 90"
-                                                    value="{{ old('patti_win_value', $game_data ? $game_data->patti_win_value : '') }}" required>
+                                                    value="{{ old('patti_win_value', $game_data ? $game_data->patti_win_value : '') }}"
+                                                    required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -72,7 +84,8 @@
                                                 <label>Jodi Win Value<strong class="text-danger">*</strong></label>
                                                 <input type="number" step="0.01" class="form-control"
                                                     name="jodi_win_value" placeholder="eg, 90"
-                                                    value="{{ old('jodi_win_value', $game_data ? $game_data->jodi_win_value : '') }}" required>
+                                                    value="{{ old('jodi_win_value', $game_data ? $game_data->jodi_win_value : '') }}"
+                                                    required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -80,7 +93,8 @@
                                                 <label>CP Win Value<strong class="text-danger">*</strong></label>
                                                 <input type="number" step="0.01" class="form-control"
                                                     name="cp_win_value" placeholder="eg, 90"
-                                                    value="{{ old('cp_win_value', $game_data ? $game_data->cp_win_value : '') }}" required>
+                                                    value="{{ old('cp_win_value', $game_data ? $game_data->cp_win_value : '') }}"
+                                                    required>
                                             </div>
                                         </div>
                                     </div>

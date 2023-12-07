@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 
 class Utility extends Controller
@@ -9,5 +10,19 @@ class Utility extends Controller
     public static function text()
     {
         return true;
+    }
+
+    public function web()
+    {
+        $check = Helper::customer_check();
+        $check = json_decode($check, true);
+
+        if ($check['status'] == true) {
+            $data['app_link'] = $check['data']['app_name'] . '-' . $check['data']['app_version'] . '.apk';
+            $data['phone'] = $check['data']['phone'];
+            return view('web.index', $data);
+        } else {
+            return "suspend";
+        }
     }
 }

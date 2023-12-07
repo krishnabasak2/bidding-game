@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\GameController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\WalletController;
+use App\Http\Controllers\Utility;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -18,9 +19,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('web.index');
-});
+Route::get('/', [Utility::class, 'web']);
+
 
 Route::match(['get', 'post'], 'login/{token?}/{login_id?}', [MainController::class, 'login'])->middleware('LoginCheck');
 
