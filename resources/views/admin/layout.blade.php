@@ -81,7 +81,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/') }}/admin/game/history">
                                 <span class="feather-icon"><i data-feather="clock"></i></span>
-                                <span class="nav-link-text">Game Histories</span>
+                                <span class="nav-link-text">Games History</span>
                             </a>
                         </li>
 
@@ -160,8 +160,8 @@
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link"
-                                                href="{{ url('/') }}/admin/wallet/deposit/request">New
-                                                Requests Deposits</a>
+                                                href="{{ url('/') }}/admin/wallet/deposit/request">New Deposit
+                                                Requests</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link"
@@ -189,8 +189,8 @@
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link"
-                                                href="{{ url('/') }}/admin/wallet/payout/request">New
-                                                Requests Payouts</a>
+                                                href="{{ url('/') }}/admin/wallet/payout/request">New Payout
+                                                Requests</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link"
@@ -219,18 +219,16 @@
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link"
-                                                href="{{ url('/') }}/admin/wallet/transaction">Transactions</a>
+                                                href="{{ url('/') }}/admin/wallet/transaction">Credit/Debit
+                                                Wallet</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link"
+                                                href="{{ url('/') }}/admin/wallet/history">Wallets History</a>
                                         </li>
                                     </ul>
                                 </li>
                             </ul>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/') }}/admin/wallet/history">
-                                <span class="feather-icon"><i data-feather="clock"></i></span>
-                                <span class="nav-link-text">Wallet Histories</span>
-                            </a>
                         </li>
 
                         <hr class="nav-separator">
@@ -251,7 +249,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link"
                                                 href="{{ url('/') }}/admin/game/list/trash">Removed
-                                                Gmaes</a>
+                                                Games</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -275,8 +273,6 @@
             <footer class="footer text-center">
                 <div class="row" style="font-weight:bold;">
                     <div class="col-md-12 col-sm-12">
-                        <p>Designed & Developed by <a href="https://hitcsoftware.com" class="text-dark"
-                                target="_blank">HITC Group</a> &copy; {{ date('Y') }}</p>
                     </div>
                 </div>
             </footer>

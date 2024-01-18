@@ -89,7 +89,7 @@ class MainController extends Controller
     public function dashboard(Request $request)
     {
         $data['site_data'] = $this->common();
-        $data['title'] = 'Dashboard';
+        $data['title'] = 'My Dashboard';
 
         $data['running_game'] = GamesResult::where('status', '0')->whereDate('created_at', Carbon::today())->get()->count();
 
@@ -141,8 +141,17 @@ class MainController extends Controller
                 "currency_symbol"       => "required",
                 "currency_word"         => "required",
                 "currency_icon"         => "required",
+                "currency_value"        => "required|numeric|gt:0",
+                "new_ac_bonus"          => "required|numeric",
+                "referrer_bonus"        => "required|numeric",
+                "joiner_bonus"          => "required|numeric",
                 "logo"                  => "nullable|max:2050",
+                "ads_status"            => "required|in:0,1",
+                "ads"                   => "sometimes|max:2050",
+                'ads_text'              => "nullable",
+                'ads_link'              => "nullable|url",
                 "baner.*"               => "nullable|max:2050",
+                "banner_links[]"        => "nullable|url",
                 "game_rule"             => "required",
                 "add_money_details"     => "required",
                 "withdrawal_details"    => "required",
@@ -168,7 +177,7 @@ class MainController extends Controller
                 "currency_symbol"       => "Currency Symbol",
                 "currency_word"         => "Currency Word",
                 "currency_icon"         => "Currency Icon",
-                "baner"                 => "Welcome Banners",
+                "baner"                 => "App Home Banners",
                 "game_rule"             => "Game Rule",
                 "add_money_details"     => "Deposit Details",
                 "withdrawal_details"    => "Withdrawal Details",
@@ -184,7 +193,7 @@ class MainController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-
+            // dd($request->all());
             if ($request->baner && count($request->baner) > 3) {
                 return redirect()->back()->with('message', 'You Can Upload Maximum 3 Banner Images.');
             }
@@ -219,6 +228,19 @@ class MainController extends Controller
                 }
             }
 
+
+            $ads_name = '';
+            if ($request->hasFile('ads')) {
+
+                $ads_name = md5(rand(100, 1000)) . '.' . $request->file('ads')->getClientOriginalExtension();
+                $request->file('ads')->storeAs('public/images', $ads_name);
+
+                $logo_data = $data['settings_data']['ads'];
+                if ($logo_data && isset($logo_data) && File::exists('storage/images/' . $logo_data)) {
+                    unlink('storage/images/' . $logo_data);
+                }
+            }
+
             $update_data = [
                 "app_name"              => $request['app_name'],
                 "url"                   => $request['url'],
@@ -227,6 +249,13 @@ class MainController extends Controller
                 "currency_symbol"       => $request['currency_symbol'],
                 "currency_word"         => $request['currency_word'],
                 "currency_icon"         => $request['currency_icon'],
+                "currency_value"        => $request['currency_value'],
+                "new_ac_bonus"          => $request['new_ac_bonus'],
+                "referrer_bonus"        => $request['referrer_bonus'],
+                "joiner_bonus"          => $request['joiner_bonus'],
+                "ads_status"            => $request['ads_status'],
+                "ads_text"              => $request['ads_text'],
+                "ads_link"              => $request['ads_link'],
                 "game_rule"             => $request['game_rule'],
                 "add_money_details"     => $request['add_money_details'],
                 "withdrawal_details"    => $request['withdrawal_details'],
@@ -240,6 +269,7 @@ class MainController extends Controller
                 "wd_start_time"         => $request['wd_start_time'] ?? $data['settings_data']['wd_start_time'],
                 "wd_end_time"           => $request['wd_end_time'] ?? $data['settings_data']['wd_end_time'],
                 "wd_days"               => $request['wd_days'] ? json_encode($request['wd_days']) : $data['settings_data']['wd_days'],
+                "banner_links"          => json_encode($request['banner_links']),
             ];
 
             if ($images_path) {
@@ -248,6 +278,10 @@ class MainController extends Controller
 
             if ($logo_name) {
                 $update_data['logo'] = $logo_name;
+            }
+
+            if ($ads_name) {
+                $update_data['ads'] = $ads_name;
             }
 
             if ($request['message'] != $data['settings_data']['message']) {

@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         \App\Models\User::factory()->create([
-            'name' => 'Admin',
-            'user_id' => Helper::user_id('0', '4'),
-            'email' => 'admin@gmail.com',
+            'name' => 'Admin Panel',
+            'user_id' => 1,
+            'email' => 'admin@admin.com',
             'role'  => '0',
             'password' => md5(md5(md5('123456')))
         ]);

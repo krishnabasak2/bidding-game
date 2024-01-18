@@ -74,7 +74,14 @@
                     <section class="hk-sec-wrapper">
                         <h6 class="pb-2">Single Data: </h6>
                         <div class="mb-3">
-                            <p><Strong>Total Amount: </Strong>{{ $site_data->currency_symbol }} {{ $single_total }}</p>
+                            <p><Strong>Total Amount: </Strong>{{ $site_data->currency_symbol }} {{ $single_total }}
+                                @if ($site_data->currency_value > 1)
+                                    <small>
+                                        (₹
+                                        {{ round($single_total / $site_data->currency_value, 2) }})
+                                    </small>
+                                @endif
+                            </p>
                         </div>
                         <div class="row">
                             <div class="col-sm">
@@ -83,8 +90,8 @@
                                         <thead class="thead-primary">
                                             <tr>
                                                 <th>Bid Number</th>
-                                                <th>Total Bid</th>
                                                 <th>Total Bid Amount</th>
+                                                <th>Total Bid</th>
                                                 <th>P/L</th>
                                             </tr>
                                         </thead>
@@ -93,9 +100,23 @@
                                                 @foreach ($single_bids as $item)
                                                     <tr>
                                                         <td>{{ $item->bid_number }}</td>
+                                                        <td>{{ $site_data->currency_symbol }} {{ $item->totalAmount }}
+                                                            @if ($site_data->currency_value > 1)
+                                                                <small>
+                                                                    (₹
+                                                                    {{ round($item->totalAmount / $site_data->currency_value, 2) }})
+                                                                </small>
+                                                            @endif
+                                                        </td>
                                                         <td>{{ $item->totalBid }}</td>
-                                                        <td>{{ $site_data->currency_symbol }} {{ $item->totalAmount }}</td>
-                                                        <td>{{ round($single_total - $item->totalAmount * $single_percent, 2) }}
+                                                        <td>{{ $site_data->currency_symbol }}
+                                                            {{ round($single_total - $item->totalAmount * $single_percent, 2) }}
+                                                            @if ($site_data->currency_value > 1)
+                                                                <small>
+                                                                    (₹
+                                                                    {{ round(($single_total - $item->totalAmount * $single_percent) / $site_data->currency_value, 2) }})
+                                                                </small>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -115,7 +136,14 @@
                     <section class="hk-sec-wrapper">
                         <h6 class="pb-2">Patti Data:</h6>
                         <div class="mb-3">
-                            <p><Strong>Patti Amount: </Strong>{{ $site_data->currency_symbol }} {{ $patti_total }}</p>
+                            <p><Strong>Total Amount: </Strong>{{ $site_data->currency_symbol }} {{ $patti_total }}
+                                @if ($site_data->currency_value > 1)
+                                    <small>
+                                        (₹
+                                        {{ round($patti_total / $site_data->currency_value, 2) }})
+                                    </small>
+                                @endif
+                            </p>
                         </div>
                         <div class="row">
                             <div class="col-sm">
@@ -124,8 +152,8 @@
                                         <thead class="thead-primary">
                                             <tr>
                                                 <th>Bid Number</th>
-                                                <th>Total Bid</th>
                                                 <th>Total Bid Amount</th>
+                                                <th>Total Bid</th>
                                                 <th>P/L</th>
                                             </tr>
                                         </thead>
@@ -134,9 +162,24 @@
                                                 @foreach ($patti_bids as $item)
                                                     <tr>
                                                         <td>{{ $item->bid_number }}</td>
+                                                        <td>{{ $site_data->currency_symbol }} {{ $item->totalAmount }}
+                                                            @if ($site_data->currency_value > 1)
+                                                                <small>
+                                                                    (₹
+                                                                    {{ round($item->totalAmount / $site_data->currency_value, 2) }})
+                                                                </small>
+                                                            @endif
+                                                        </td>
                                                         <td>{{ $item->totalBid }}</td>
-                                                        <td>{{ $site_data->currency_symbol }} {{ $item->totalAmount }}</td>
-                                                        <td>{{ round($patti_total - $item->totalAmount * $patti_percent, 2) }}
+                                                        <td>{{ $site_data->currency_symbol }}
+                                                            {{ round($patti_total - $item->totalAmount * $patti_percent, 2) }}
+
+                                                            @if ($site_data->currency_value > 1)
+                                                                <small>
+                                                                    (₹
+                                                                    {{ round(($patti_total - $item->totalAmount * $patti_percent) / $site_data->currency_value, 2) }})
+                                                                </small>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -156,7 +199,14 @@
                     <section class="hk-sec-wrapper">
                         <h6 class="pb-2">Jodi Data:</h6>
                         <div class="mb-3">
-                            <p><Strong>Total Amount: </Strong>{{ $site_data->currency_symbol }} {{ $jodi_total }}</p>
+                            <p><Strong>Total Amount: </Strong>{{ $site_data->currency_symbol }} {{ $jodi_total }}
+                                @if ($site_data->currency_value > 1)
+                                    <small>
+                                        (₹
+                                        {{ round($jodi_total / $site_data->currency_value, 2) }})
+                                    </small>
+                                @endif
+                            </p>
                         </div>
                         <div class="row">
                             <div class="col-sm">
@@ -165,8 +215,8 @@
                                         <thead class="thead-primary">
                                             <tr>
                                                 <th>Bid Number</th>
-                                                <th>Total Bid</th>
                                                 <th>Total Bid Amount</th>
+                                                <th>Total Bid</th>
                                                 <th>P/L</th>
                                             </tr>
                                         </thead>
@@ -175,9 +225,24 @@
                                                 @foreach ($jodi_bids as $item)
                                                     <tr>
                                                         <td>{{ $item->bid_number }}</td>
+                                                        <td>{{ $site_data->currency_symbol }} {{ $item->totalAmount }}
+                                                            @if ($site_data->currency_value > 1)
+                                                                <small>
+                                                                    (₹
+                                                                    {{ round($item->totalAmount / $site_data->currency_value, 2) }})
+                                                                </small>
+                                                            @endif
+                                                        </td>
                                                         <td>{{ $item->totalBid }}</td>
-                                                        <td>{{ $site_data->currency_symbol }} {{ $item->totalAmount }}</td>
-                                                        <td>{{ round($jodi_total - $item->totalAmount * $jodi_percent, 2) }}
+                                                        <td>{{ $site_data->currency_symbol }}
+                                                            {{ round($jodi_total - $item->totalAmount * $jodi_percent, 2) }}
+
+                                                            @if ($site_data->currency_value > 1)
+                                                                <small>
+                                                                    (₹
+                                                                    {{ round(($jodi_total - $item->totalAmount * $jodi_percent) / $site_data->currency_value, 2) }})
+                                                                </small>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach

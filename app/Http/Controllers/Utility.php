@@ -17,12 +17,12 @@ class Utility extends Controller
         $check = Helper::customer_check();
         $check = json_decode($check, true);
 
-        if ($check['status'] == true) {
-            $data['app_link'] = $check['data']['app_name'] . '-' . $check['data']['app_version'] . '.apk';
+        if ($check && $check['status'] == true) {
+            $data['app_link'] = $check['data']['app_link'];
             $data['phone'] = $check['data']['phone'];
             return view('web.index', $data);
         } else {
-            return "suspend";
+            return view('web.maintenance');
         }
     }
 }

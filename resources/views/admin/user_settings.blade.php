@@ -44,7 +44,7 @@ exit;
                             <form action="" method="post">
                                 @csrf
                                 <div class="form-row">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label>Setting</label>
                                         <select name="setting" class="form-control">
                                             <option value="off" {{$settings && $settings->setting == 'off' ? 'selected' :
@@ -54,14 +54,14 @@ exit;
                                         </select>
                                     </div>
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label>Maximum Single Bidding Number</label>
                                         <input type="number" class="form-control" name="max_single_bid_num" max="10"
                                             placeholder="Maximum Single Bidding Number"
                                             value="{{ $settings ? $settings->max_single_bid_num : old('max_single_bid_num') }}">
                                     </div>
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label>Maximum Bidding Amount</label>
                                         <input type="number" class="form-control" name="max_bid_amo"
                                             placeholder="Maximum Bidding Amount"

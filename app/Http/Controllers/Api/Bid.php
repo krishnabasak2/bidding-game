@@ -23,7 +23,7 @@ class Bid extends Controller
             $validator = Validator::make($request->all(), [
                 'result_id'               => 'required|numeric',
                 'type'                    => 'required|in:1,2,3',
-                'bids.*.number'           => 'integer|min:0',
+                // 'bids.*.number'           => 'integer|min:0',
                 'bids.*.amount'           => 'integer|min:1',
             ], [
                 'bids.*.number'           => "Please enter valid number.",
@@ -35,13 +35,13 @@ class Bid extends Controller
 
             if ($request['type'] == '3') {
                 $validator = Validator::make($request->all(), [
-                    'bids.*.number'           => 'integer|min:0|digits:3',
+                    'bids.*.number'           => 'numeric|min:0|digits:3',
                 ], [
                     'bids.*.number'           => "Please enter valid number.",
                 ]);
             } elseif ($request['type'] == '2') {
                 $validator = Validator::make($request->all(), [
-                    'bids.*.number'           => 'integer|min:0|digits:2',
+                    'bids.*.number'           => 'numeric|min:0|digits:2',
                 ], [
                     'bids.*.number'           => "Please enter valid number.",
                 ]);
@@ -65,7 +65,7 @@ class Bid extends Controller
                 return response()->json(['status' => false, 'message' => 'Game not found.', 'data' => null], 400);
             }
 
-            $current_time = date('H:s');
+            $current_time = date('H:i');
             if ($game_result['getTime']['stop_time'] < $current_time) {
                 return response()->json(['status' => false, 'message' => 'Bidding time is over..', 'data' => null], 400);
             }
@@ -77,8 +77,8 @@ class Bid extends Controller
             $user_settings = json_decode($user_data->game_settings, true);
 
             if ($user_settings['setting'] == 'on') {
-                $max_amount = $user_data['max_bid_amo'];
-                $max_single_num = $user_data['max_single_bid_num'];
+                $max_amount = $user_settings['max_bid_amo'];
+                $max_single_num = $user_settings['max_single_bid_num'];
             } else {
                 $max_amount = $settings->max_bet_amount;
                 $max_single_num = $settings->max_single_bet;
@@ -97,29 +97,37 @@ class Bid extends Controller
             }
 
             if ($max_amount < ($user_total_bids_amo + $total_req_bid_amo)) {
-                return response()->json(['status' => false, 'message' => "Maximum bidding amount is $settings->max_bet_amount", 'data' => null], 400);
+                return response()->json(['status' => false, 'message' => "Maximum bidding amount is $max_amount", 'data' => null], 400);
             }
 
             // how many single number can bids checks
             if ($request['type'] == '1') {
                 $total_single_bids = $user_bids->where('game_type', '1');
-                $total_single_num = $user_bids->where('game_type', '1')->count();
+                $total_single_num = $user_bids->where('game_type', '1')->groupBy('bid_number');
+                $total_single_num = count($total_single_num);
 
-                foreach ($total_single_bids as $value) {
+                // return response()->json(['data' => $total_single_num]);
 
+                if ($total_single_num > 0) {
                     foreach ($request['bids'] as $bid) {
-                        if ($value['bid_number'] == $bid['number']) {
-                            $common = true;
-                            break;
-                        } else {
-                            $common = false;
+
+                        foreach ($total_single_bids as $value) {
+                            if ($bid['number'] == $value['bid_number']) {
+                                $common = true;
+                                break;
+                            } else {
+                                $common = false;
+                            }
+                        }
+
+                        if (!$common) {
+                            $total_single_num = $total_single_num + 1;
                         }
                     }
-
-                    if (!$common) {
-                        $total_single_num = $total_single_num + 1;
-                    }
                 }
+                // return response()->json(['data' => $total_single_num]);
+
+
 
                 if ($max_single_num < $total_single_num) {
                     return response()->json(['status' => false, 'message' => "Maximum bidding number is $max_single_num", 'data' => null], 400);

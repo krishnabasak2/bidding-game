@@ -95,7 +95,7 @@
                                                 <th>Amount</th>
                                                 <th>TXN Type</th>
                                                 <th>Status</th>
-                                                <th>Current Balance</th>
+                                                <th>Wallet Balance</th>
                                                 <th>Date & Time</th>
                                                 <th>Remarks</th>
                                             </tr>
@@ -106,7 +106,14 @@
                                                     <tr>
                                                         <td>{{ $key + 1 }}</td>
                                                         <td>{{ $data['txn_id'] }}</td>
-                                                        <td>{{ $site_data->currency_symbol }} {{ $data['amount'] }}</td>
+                                                        <td>{{ $site_data->currency_symbol }} {{ $data['amount'] }}
+                                                            @if ($site_data->currency_value > 1)
+                                                                <small>
+                                                                    (₹
+                                                                    {{ round($data['amount'] / $site_data->currency_value, 2) }})
+                                                                </small>
+                                                            @endif
+                                                        </td>
                                                         <td>
                                                             {{ $data['type'] == '0' ? 'Debited' : 'Credited' }}
                                                         </td>
@@ -121,7 +128,15 @@
                                                                 ? 'Payout'
                                                                 : 'By Admin' }}
                                                         </td>
-                                                        <td>{{ $site_data->currency_symbol }} {{ $data['current_balance'] }}</td>
+                                                        <td>{{ $site_data->currency_symbol }}
+                                                            {{ $data['current_balance'] }}
+                                                            @if ($site_data->currency_value > 1)
+                                                                <small>
+                                                                    (₹
+                                                                    {{ round($data['current_balance'] / $site_data->currency_value, 2) }})
+                                                                </small>
+                                                            @endif
+                                                        </td>
                                                         <td>
                                                             {{ date('M j, Y - h:i:s a', strtotime($data['created_at'])) }}
                                                         </td>

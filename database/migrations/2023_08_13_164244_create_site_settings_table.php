@@ -21,8 +21,17 @@ return new class extends Migration
             $table->text('currency_word')->nullable();
             $table->text('currency_symbol')->nullable();
             $table->text('currency_icon')->nullable();
+            $table->text('currency_value')->default('1');
+            $table->decimal('new_ac_bonus')->default(0);
+            $table->decimal('referrer_bonus')->default(0);
+            $table->decimal('joiner_bonus')->default(0);
             $table->longText('logo')->nullable();
             $table->longText('baner')->nullable();
+            $table->longText('banner_links')->nullable();
+            $table->longText('ads')->nullable();
+            $table->longText('ads_text')->nullable();
+            $table->longText('ads_link')->nullable();
+            $table->set('ads_status', ['0', '1'])->default('1')->comment('0:Off, 1:On');
             $table->longText('game_rule')->nullable();
             $table->longText('add_money_details')->nullable();
             $table->longText('withdrawal_details')->nullable();
