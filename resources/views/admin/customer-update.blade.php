@@ -39,22 +39,28 @@
                                 <form action="" method="post">
                                     @csrf
                                     <div class="form-row">
-                                        <div class="form-group col-md-6">
+                                        <div class="form-group col-md-4">
                                             <label>Name <strong class="text-danger">*</strong></label>
                                             <input type="text" class="form-control" name="name" placeholder="Name"
                                                 value="{{ $user ? $user->name : old('name') }}" required>
                                         </div>
-                                        <div class="form-group col-md-6">
-                                            <label>Phone No.<strong class="text-danger">*</strong></label>
+                                        <div class="form-group col-md-4">
+                                            <label>Phone No. <strong class="text-danger">*</strong></label>
                                             <input type="text" class="form-control" name="phone" placeholder="Phone"
                                                 value="{{ $user ? $user->phone : old('phone') }}" required>
                                         </div>
-                                        <div class="form-group col-md-6">
-                                            <label>Email ID<strong class="text-danger">*</strong></label>
+                                        <div class="form-group col-md-4">
+                                            <label>Email ID<strong class="text-danger"></strong></label>
                                             <input type="email" class="form-control" name="email" placeholder="Email"
-                                                value="{{ $user ? $user->email : old('email') }}" required>
+                                                value="{{ $user ? $user->email : old('email') }}">
                                         </div>
                                         @if (!$user)
+                                            <div class="form-group col-md-6">
+                                                <label>Referral Code<strong class="text-danger"></strong></label>
+                                                <input type="text" class="form-control" name="referer_uid"
+                                                    placeholder="Referral Code"
+                                                    value="{{ old('referer_uid') }}">
+                                            </div>
                                             <div class="form-group col-md-6">
                                                 <label>Password <strong class="text-danger">*</strong></label>
                                                 <input type="text" class="form-control" name="password"

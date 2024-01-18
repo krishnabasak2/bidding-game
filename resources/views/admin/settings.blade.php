@@ -75,7 +75,7 @@
                                         </div>
 
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Currency In Word <strong class="text-danger">*</strong></label>
                                                 <input type="text" class="form-control" name="currency_word"
@@ -83,7 +83,7 @@
                                                     required>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Currency In Symbol <strong class="text-danger">*</strong></label>
                                                 <input type="text" class="form-control" name="currency_symbol"
@@ -91,26 +91,60 @@
                                                     required>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Currency In Icon <strong class="text-danger">*</strong></label>
+                                                <label>Currency Icon <strong class="text-danger">*</strong></label>
                                                 <input type="text" class="form-control" name="currency_icon"
                                                     value="@if (!empty($settings_data)){{ $settings_data->currency_icon }}@else{{ old('currency_icon') }} @endif"
                                                     required>
                                             </div>
                                         </div>
-
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Currency Value (1 INR)<strong class="text-danger">*</strong></label>
+                                                <input type="number" class="form-control" name="currency_value" step="any" min="0" placeholder="1 INR = ?? {{$settings_data->currency_word}}"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->currency_value }}@else{{ old('currency_value') }} @endif"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Registration Bonus <strong class="text-danger">*</strong></label>
+                                                <input type="number" class="form-control" name="new_ac_bonus"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->new_ac_bonus }}@else{{ old('new_ac_bonus') }} @endif"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Referrer Bonus <strong class="text-danger">*</strong></label>
+                                                <input type="number" class="form-control" name="referrer_bonus"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->referrer_bonus }}@else{{ old('referrer_bonus') }} @endif"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Joining Bonus <strong class="text-danger">*</strong></label>
+                                                <input type="number" class="form-control" name="joiner_bonus"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->joiner_bonus }}@else{{ old('joiner_bonus') }} @endif"
+                                                    required>
+                                            </div>
+                                        </div>
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Application Logo <small>(450px*120px)</small><strong class="text-danger">*</strong></label>
+                                                <label>Application Logo <small>(450px*120px)</small><strong
+                                                        class="text-danger">*</strong></label>
                                                 <input type="file" class="form-control" name="logo" multiple>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <img src="{{ asset('storage/images') }}/{{ $settings_data->logo }}"
-                                                    alt="" width="150px">
+                                                <div class="col-md-12">
+                                                    <img src="{{ asset('storage/images') }}/{{ $settings_data->logo }}"
+                                                        alt="" width="150px">
+                                                </div>
                                             </div>
                                         </div>
 
@@ -118,7 +152,8 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Welcome Banners <small>(800px*400px)</small><strong class="text-danger">*</strong></label>
+                                                <label>App Home Banners <small>(800px*400px)</small><strong
+                                                        class="text-danger">*</strong></label>
                                                 <input type="file" class="form-control" name="baner[]" multiple>
                                             </div>
                                         </div>
@@ -137,11 +172,84 @@
                                                 @endif
                                             </div>
                                         </div>
+
+                                        @php
+                                            $banner_links = json_decode($settings_data->banner_links, true);
+                                        @endphp
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Banner-1 Link<strong class="text-danger"></strong></label>
+                                                <input type="url" class="form-control" name="banner_links[]"
+                                                    placeholder="Banner-1 Link"
+                                                    value="@if (!empty($banner_links[0])){{ $banner_links[0] }}@else{{ old('ads_link') }} @endif">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Banner-2 Link<strong class="text-danger"></strong></label>
+                                                <input type="url" class="form-control" name="banner_links[]"
+                                                    placeholder="Banner-2 Link"
+                                                    value="@if (!empty($banner_links[1])){{ $banner_links[1] }}@else{{ old('ads_link') }} @endif">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Banner-3 Link<strong class="text-danger"></strong></label>
+                                                <input type="url" class="form-control" name="banner_links[]"
+                                                    placeholder="Banner-3 Link"
+                                                    value="@if (!empty($banner_links[2])){{ $banner_links[2] }}@else{{ old('ads_link') }} @endif">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label>Ad Status<strong class="text-danger"></strong></label>
+                                                <select name="ads_status" class="form-control">
+                                                    <option value="0"
+                                                        {{ $settings_data->ads_status == '0' ? 'selected' : '' }}>Off
+                                                    </option>
+                                                    <option value="1"
+                                                        {{ $settings_data->ads_status == '1' ? 'selected' : '' }}>On
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Ad Title<strong class="text-danger"></strong></label>
+                                                <input type="text" class="form-control" name="ads_text"
+                                                    placeholder="Ad Text"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->ads_text }}@else{{ old('ads_text') }} @endif">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Ad Link<strong class="text-danger"></strong></label>
+                                                <input type="url" class="form-control" name="ads_link"
+                                                    placeholder="Ad Link"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->ads_link }}@else{{ old('ads_link') }} @endif">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Ad Image <small>(480px*480px)</small><strong class="text-danger"></strong></label>
+                                                <input type="file" class="form-control" name="ads">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <img src="{{ asset('storage/images') }}/{{ $settings_data->ads }}"
+                                                        alt="" width="130px" height="130px">
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Game Rules <strong class="text-danger">*</strong></label>
                                                 <textarea id="gameRules" class="form-control" name="game_rule" required>
-                                                    @if (!empty($settings_data)){{ $settings_data->game_rule }}@else{{ old('game_rule') }}
+                                                    @if (!empty($settings_data))
+{{ $settings_data->game_rule }}@else{{ old('game_rule') }}
 @endif
                                                 </textarea>
                                             </div>
@@ -150,7 +258,8 @@
                                             <div class="form-group">
                                                 <label>Deposit Details <strong class="text-danger">*</strong></label>
                                                 <textarea id="add_money_details" class="form-control" name="add_money_details" required>
-                                                    @if (!empty($settings_data)){{ $settings_data->add_money_details }}@else{{ old('add_money_details') }}
+                                                    @if (!empty($settings_data))
+{{ $settings_data->add_money_details }}@else{{ old('add_money_details') }}
 @endif
                                                 </textarea>
                                             </div>
@@ -159,7 +268,8 @@
                                             <div class="form-group">
                                                 <label>Withdrawal Details <strong class="text-danger">*</strong></label>
                                                 <textarea id="withdrawal_details" class="form-control" name="withdrawal_details" required>
-                                                    @if (!empty($settings_data)){{ $settings_data->withdrawal_details }}@else{{ old('withdrawal_details') }}
+                                                    @if (!empty($settings_data))
+{{ $settings_data->withdrawal_details }}@else{{ old('withdrawal_details') }}
 @endif
                                                 </textarea>
                                             </div>
@@ -168,7 +278,8 @@
                                             <div class="form-group">
                                                 <label>Notice <strong class="text-danger">*</strong></label>
                                                 <textarea class="form-control" name="notice" required>
-@if (!empty($settings_data)){{ $settings_data->notice }}@else{{ old('notice') }}
+@if (!empty($settings_data))
+{{ $settings_data->notice }}@else{{ old('notice') }}
 @endif
 </textarea>
                                             </div>
@@ -177,7 +288,8 @@
                                             <div class="form-group">
                                                 <label>Message</label>
                                                 <textarea class="form-control" name="message">
-@if (!empty($settings_data)){{ $settings_data->message }}@else{{ old('message') }}
+@if (!empty($settings_data))
+{{ $settings_data->message }}@else{{ old('message') }}
 @endif
 </textarea>
                                             </div>

@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Stmt\TryCatch;
 
@@ -25,12 +26,22 @@ class UserMain extends Controller
             $validator = Validator::make($request->all(), [
                 'name'              => 'required',
                 'phone'             => 'required|unique:users,phone',
+                'referer_uid'       => 'nullable',
                 'password'          => 'required_with:confirm_password|same:confirm_password|min:6',
                 'confirm_password'  => 'required|min:6'
             ]);
 
             if ($validator->fails()) {
                 return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => null], 400);
+            }
+
+            if ($request['referer_uid']) {
+                $referr = User::where('phone', $request['referer_uid'])->withTrashed()->first();
+                if (!empty($referr)) {
+                    $request['referer_uid'] = $referr['id'];
+                } else {
+                    return response()->json(['status' => false, 'message' => 'Referral code invalid.', 'data' => null], 400);
+                }
             }
 
             $count = User::count();
@@ -99,8 +110,15 @@ class UserMain extends Controller
             if (!empty($user)) {
                 $response = Helper::customer_check();
                 $response = json_decode($response);
+
                 if ($response->status === true) {
-                    return response()->json(['status' => true, 'user' => $user, 200]);
+                    if ($user->referer_uid) {
+                        $refer = User::where('id', $user->referer_uid)->first();
+                        $refer = $refer['phone'];
+                    } else {
+                        $refer = null;
+                    }
+                    return response()->json(['status' => true, 'user' => $user, 'refer' => $refer, 200]);
                 } else {
                     return response()->json(['status' => false, 'user' => null, 400]);
                 }
@@ -157,8 +175,8 @@ class UserMain extends Controller
             $user = User::where('id', Auth::id())->first();
 
             if (!empty($user)) {
-                if (md5(md5(md5($request['current_password']))) == $user->password) {
-                    $user->update(['password' => md5(md5(md5($request['new_password'])))]);
+                if (Hash::check($request['current_password'], $user->password)) {
+                    $user->update(['password' => Hash::make($request['new_password'])]);
 
                     return response()->json(['status' => true, 'message' => 'Password Has Been Updated Successully.', 'data' => $user], 200);
                 } else {
@@ -169,6 +187,36 @@ class UserMain extends Controller
             }
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'message' => 'Internal server errors.', 'data' => $th], 500);
+        }
+    }
+
+    public function reset_password($phone)
+    {
+        $user = User::where('phone', $phone)->first();
+
+        if (empty($user)) {
+            return response()->json(['status' => false, 'message' => "Phone number not found.", 'data' => null], 400);
+        }
+
+        if ($user->email) {
+            $password = rand(100000, 999999);
+            $email = $user->email;
+
+            $view_data = [
+                'name' => $user->name,
+                'password' => $password,
+            ];
+
+            Mail::send('web.reset_password_email', $view_data, function ($message) use ($email) {
+                $message->to($email);
+                $message->subject('Password Reset!');
+            });
+
+            $user->update(['password' => Hash::make($password)]);
+
+            return response()->json(['status' => true, 'message' => "Password Has send to your email $email."], 200);
+        } else {
+            return response()->json(['status' => false, 'message' => "Email-ID not updated in your account.", 'data' => null], 400);
         }
     }
 

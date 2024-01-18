@@ -17,7 +17,7 @@ class WalletController extends Controller
         $mainController = new MainController();
         $data['site_data'] = $mainController->common();
         $data['page'] = 'Dashboard';
-        $data['title'] = 'Transaction';
+        $data['title'] = "Credit/Debit Wallet";
         $data['users'] = User::where('role', '1')->withTrashed()->get();
 
         if (Request()->isMethod('POST')) {
@@ -56,7 +56,7 @@ class WalletController extends Controller
         $mainController = new MainController();
         $data['site_data'] = $mainController->common();
         $data['page'] = 'Dashboard';
-        $data['title'] = 'Wallet History';
+        $data['title'] = 'Wallets History';
         $data['users'] = User::where('role', '1')->withTrashed()->get();
         $data['data_list'] = [];
 
@@ -93,14 +93,16 @@ class WalletController extends Controller
             $data['title'] = 'New Deposit Requests';
             $data_list = Deposit::where(['status' => '2'])->with('user')->get();
         } elseif ($type == 'approved') {
-            $data['title'] = 'Approved Deposit';
+            $data['title'] = 'Approved Deposits';
             $data_list = Deposit::where(['status' => '1'])->with('user')->get();
         } elseif ($type == 'rejected') {
-            $data['title'] = 'Rejected Deposit';
+            $data['title'] = 'Rejected Deposits';
             $data_list = Deposit::where(['status' => '0'])->with('user')->get();
         } else {
             return redirect()->back();
         }
+
+        // dd($data_list->toArray());
 
         $data['data_list'] = $data_list;
         return view('admin.wallet.deposit', $data);
@@ -113,7 +115,7 @@ class WalletController extends Controller
         $data['page'] = 'Dashboard';
 
         if ($type == 'request') {
-            $data['title'] = 'New Payouts Requests';
+            $data['title'] = 'New Payout Requests';
             $data_list = Payout::where(['status' => '2'])->with('user')->get();
         } elseif ($type == 'approved') {
             $data['title'] = 'Approved Payouts';

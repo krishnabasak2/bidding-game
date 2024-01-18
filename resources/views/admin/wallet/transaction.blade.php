@@ -69,8 +69,12 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Amount<strong class="text-danger">*</strong></label>
-                                                <input type="number" step="0.01" placeholder="Amount"
+                                                <label>Amount ({{ $site_data->currency_word }})<strong
+                                                        class="text-danger">*</strong></label>
+                                                <input type="number" step="0.01"
+                                                    @if ($site_data->currency_value > 1) placeholder="{{ $site_data->currency_value }} {{ $site_data->currency_word }} = 1 INR"
+                                                    @else
+                                                    placeholder="Amount" @endif
                                                     class="form-control" name="amount" value="" required>
                                             </div>
                                         </div>

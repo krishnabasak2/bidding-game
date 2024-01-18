@@ -2,8 +2,10 @@
 
 namespace App\Observers;
 
+use App\Helpers\Helper;
 use App\Models\BidsHistory;
 use App\Models\PayoutSetting;
+use App\Models\SiteSetting;
 use App\Models\Transaction;
 use App\Models\User;
 
@@ -21,7 +23,23 @@ class UserObserver
             'max_single_bid_num' => 10,
             'max_bid_amo' => 10000
         ];
-        
+
+        $setting = SiteSetting::first();
+
+        if ($setting['new_ac_bonus'] > 0) {
+            Helper::wallet($user->id, '1', $setting['new_ac_bonus'], '4', 'Sign in bonus');
+        }
+
+        if ($user->referer_uid) {
+            if ($setting['joiner_bonus'] > 0) {
+                Helper::wallet($user->id, '1', $setting['joiner_bonus'], '4', 'Referral bonus');
+            }
+
+            if ($setting['referrer_bonus'] > 0) {
+                Helper::wallet($user->referer_uid, '1', $setting['referrer_bonus'], '4', 'Referral bonus');
+            }
+        }
+
         $user->update(['game_settings' => json_encode($game_setting)]);
     }
 

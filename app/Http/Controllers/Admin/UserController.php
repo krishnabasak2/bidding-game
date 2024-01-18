@@ -23,17 +23,27 @@ class UserController extends Controller
             $validator = Validator::make($request->all(), [
                 'name'          => 'required',
                 'phone'         => 'required|unique:users',
-                'email'         => 'required|unique:users',
+                'email'         => 'nullable|unique:users',
                 'password'      => 'required|min:6',
                 'referer_uid'   => 'nullable',
             ], [], [
                 'name'          => 'Name',
                 'phone'         => 'Phone No.',
                 'email'         => 'Email ID',
-                'password'      => 'Password'
+                'password'      => 'Password',
+                'referer_uid'   => 'Referer code'
             ]);
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            if ($request['referer_uid']) {
+                $referr = User::where('phone', $request['referer_uid'])->withTrashed()->first();
+                if (!empty($referr)) {
+                    $request['referer_uid'] = $referr['id'];
+                } else {
+                    return redirect()->back()->with('message', 'Referral code invalid.');
+                }
             }
 
             $count = User::count();
@@ -55,7 +65,7 @@ class UserController extends Controller
         $data['site_data'] = $mainController->common();
         $data['title'] = 'Edit User';
         $data['page'] = 'Dashboard';
-        $user_data = User::where(['id' => $id, 'role' => '1'])->first();
+        $user_data = User::where(['id' => $id, 'role' => '1'])->withTrashed()->first();
 
         if (empty($user_data)) {
             return redirect()->back()->with('message', 'User not found.');
@@ -65,7 +75,7 @@ class UserController extends Controller
             $validator = Validator::make($request->all(), [
                 'name'          => 'required',
                 'phone'         => "required|unique:users,phone,{$user_data->id}",
-                'email'         => "required|unique:users,email,{$user_data->id}",
+                'email'         => "nullable|unique:users,email,{$user_data->id}",
                 'referer_uid'   => 'nullable',
             ]);
             if ($validator->fails()) {
@@ -181,7 +191,7 @@ class UserController extends Controller
             $reload = true;
         } elseif ($type == '5') {
             $password = rand(100000, 999999);
-            $user->update(['password' => md5(md5(md5($password)))]);
+            $user->update(['password' => Hash::make($password)]);
             $message = "New Password Has Been Generated Successfully. New Password is: {$password}";
             $reload = false;
         } else {

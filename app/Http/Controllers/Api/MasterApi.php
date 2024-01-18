@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BidsHistory;
 use App\Models\Deposit;
 use App\Models\Payout;
+use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -45,7 +46,8 @@ class MasterApi extends Controller
 
         $data['monthly_withdrawal_amount'] = Payout::where('status', '1')->whereMonth('created_at', Carbon::now()->month)->get()->sum('amount');
 
-        return response()->json(['status' => true, 'data' => $data,], 200);
+        $data['site_data'] = SiteSetting::select('currency_value')->first();
+        return response()->json(['status' => true, 'data' => $data], 200);
     }
 
     public function auth_update($master_id, $email, $password)

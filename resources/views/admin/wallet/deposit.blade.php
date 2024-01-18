@@ -56,13 +56,24 @@
                                                     <tr id="row_{{ $data['id'] }}">
                                                         <td>{{ $key + 1 }}</td>
                                                         <th>
-                                                            Name: {{ $data_list[0]['user']['name'] }}<br>
-                                                            Phone: {{ $data_list[0]['user']['phone'] }}
+                                                            Name: {{ $data['user']['name'] }}<br>
+                                                            Phone: {{ $data['user']['phone'] }}
                                                             <br>
-                                                            Current Wallet: ₹ {{ $data_list[0]['user']['wallet'] }}
+                                                            Current Wallet: {{ $site_data->currency_symbol }}
+                                                            {{ $data['user']['wallet'] }}
+
+                                                            @if ($site_data->currency_value > 1)
+                                                                (₹
+                                                                {{ round($data['user']['wallet'] / $site_data->currency_value, 2) }})
+                                                            @endif
                                                         </th>
                                                         <td>{{ $data['txn_id'] ?? 'N/A' }}</td>
-                                                        <td>{{ $site_data->currency_symbol }} {{ $data['amount'] }}</td>
+                                                        <td>{{ $site_data->currency_symbol }} {{ $data['amount'] }}
+                                                            @if ($site_data->currency_value > 1)
+                                                                (₹
+                                                                {{ round($data['amount'] / $site_data->currency_value, 2) }})
+                                                            @endif
+                                                        </td>
                                                         <td>
                                                             {{ $data['txn_number'] ?? 'N/A' }}
                                                             @if ($data['txn_method'] == '1')

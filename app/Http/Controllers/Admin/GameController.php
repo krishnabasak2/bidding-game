@@ -291,7 +291,7 @@ class GameController extends Controller
         $mainController = new MainController();
         $data['site_data'] = $mainController->common();
         $data['page'] = 'Dashboard';
-        $data['title'] = 'Games Histories';
+        $data['title'] = 'Games History';
 
         $game_data = GamesList::where(['status' => '1'])->get();
         $data['data_list'] = $game_data;
@@ -522,7 +522,7 @@ class GameController extends Controller
         $jodi_percent = $result_data->getGame[0]->jodi_win_value;
 
         // -------------------- Single Process --------------------
-        if ($result_data->single_win_value) {
+        if (isset($result_data->single_win_value)) {
             $single = BidsHistory::where(['game_id' => $result_data->game_id, 'time_id' => $result_data->time_id, 'result_id' => $result_data->id, 'status' => '2'])->where(['bid_number' => $result_data->single_win_value, 'game_type' => '1'])->get();
 
             if ($single->isNotEmpty()) {
@@ -538,7 +538,7 @@ class GameController extends Controller
         }
 
         // -------------------- Patti Process --------------------
-        if ($result_data->patti_win_value) {
+        if (isset($result_data->patti_win_value)) {
             $patti = BidsHistory::where(['game_id' => $result_data->game_id, 'time_id' => $result_data->time_id, 'result_id' => $result_data->id, 'status' => '2'])->where(['bid_number' => $result_data->patti_win_value, 'game_type' => '3'])->get();
 
             if ($patti->isNotEmpty()) {
@@ -554,7 +554,7 @@ class GameController extends Controller
         }
 
         // -------------------- Jodi Process --------------------
-        if ($result_data->jodi_win_value) {
+        if (isset($result_data->jodi_win_value)) {
 
             if (!empty($previous_time)) {
                 $previous_result = GamesResult::where(['game_id' => $result_data->game_id, 'time_id' => $previous_time->id])->with('getTime')->orderBy('created_at', 'DESC')->first();

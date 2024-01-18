@@ -115,89 +115,15 @@
                                             </div>
                                             <span
                                                 class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_customer_wallet_balance }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="card card-sm">
-                                        <div class="card-body bg-info">
-                                            <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Today Bid
-                                                    Amount</span>
-                                            </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_today_bid_amount }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="card card-sm">
-                                        <div class="card-body bg-gradient-warning">
-                                            <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Monthly Bid
-                                                    Amount</span>
-                                            </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_monthly_bid_amount }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="hk-row">
-                                <div class="col-sm-3">
-                                    <div class="card card-sm">
-                                        <div class="card-body bg-success">
-                                            <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Today Win
-                                                    Amount</span>
-                                            </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_today_win_amount }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="card card-sm">
-                                        <div class="card-body bg-gradient-danger">
-                                            <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Monthly Win
-                                                    Amount</span>
-                                            </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_monthly_win_amount }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="card card-sm">
-                                        <div class="card-body bg-warning">
-                                            <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Today Deposit
-                                                    Amount</span>
-                                            </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $today_deposit_amount }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="card card-sm">
-                                        <div class="card-body bg-gradient-success">
-                                            <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Monthly Deposit
-                                                    Amount</span>
-                                            </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $monthly_deposit_amount }}</span>
+                                                {{ $total_customer_wallet_balance }}
+
+                                                @if ($site_data->currency_value > 1)
+                                                    <small>
+                                                        (₹
+                                                        {{ round($total_customer_wallet_balance / $site_data->currency_value . 2) }})
+                                                    </small>
+                                                @endif
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -210,33 +136,15 @@
                                             </div>
                                             <span
                                                 class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_deposit_amount }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="card card-sm">
-                                        <div class="card-body bg-success">
-                                            <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Today Withdrawal
-                                                    Amount</span>
-                                            </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $today_withdrawal_amount }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="card card-sm">
-                                        <div class="card-body bg-info">
-                                            <div class="d-flex justify-content-between mb-5">
-                                                <span class="d-block font-15 text-white font-weight-500">Monthly Withdrawal
-                                                    Amount</span>
-                                            </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $monthly_withdrawal_amount }}</span>
+                                                {{ $total_deposit_amount }}
+
+                                                @if ($site_data->currency_value > 1)
+                                                    <small>
+                                                        (₹
+                                                        {{ round($total_deposit_amount / $site_data->currency_value, 2) }})
+                                                    </small>
+                                                @endif
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -249,7 +157,183 @@
                                             </div>
                                             <span
                                                 class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_withdrawal_amount }}</span>
+                                                {{ $total_withdrawal_amount }}
+
+                                                @if ($site_data->currency_value > 1)
+                                                    <small>
+                                                        (₹
+                                                        {{ round($total_withdrawal_amount / $site_data->currency_value, 2) }})
+                                                    </small>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-info">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Today Bid
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $total_today_bid_amount }}
+
+                                                @if ($site_data->currency_value > 1)
+                                                    <small>
+                                                        (₹
+                                                        {{ round($total_today_bid_amount / $site_data->currency_value, 2) }})
+                                                    </small>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-success">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Today Win
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $total_today_win_amount }}
+
+                                                @if ($site_data->currency_value > 1)
+                                                    <small>
+                                                        (₹
+                                                        {{ round($total_today_win_amount / $site_data->currency_value, 2) }})
+                                                    </small>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-warning">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Today Deposit
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $today_deposit_amount }}
+
+                                                @if ($site_data->currency_value > 1)
+                                                    <small>
+                                                        (₹
+                                                        {{ round($today_deposit_amount / $site_data->currency_value, 2) }})
+                                                    </small>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-success">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Today Withdrawal
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $today_withdrawal_amount }}
+
+                                                @if ($site_data->currency_value > 1)
+                                                    <small>
+                                                        (₹
+                                                        {{ round($today_withdrawal_amount / $site_data->currency_value, 2) }})
+                                                    </small>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-gradient-warning">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Monthly Bid
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $total_monthly_bid_amount }}
+
+                                                @if ($site_data->currency_value > 1)
+                                                    <small>
+                                                        (₹
+                                                        {{ round($total_monthly_bid_amount / $site_data->currency_value, 2) }})
+                                                    </small>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-gradient-danger">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Monthly Win
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $total_monthly_win_amount }}
+
+                                                @if ($site_data->currency_value > 1)
+                                                    <small>
+                                                        (₹
+                                                        {{ round($total_monthly_win_amount / $site_data->currency_value, 2) }})
+                                                    </small>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-gradient-success">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Monthly Deposit
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $monthly_deposit_amount }}
+
+                                                @if ($site_data->currency_value > 1)
+                                                    <small>
+                                                        (₹
+                                                        {{ round($monthly_deposit_amount / $site_data->currency_value, 2) }})
+                                                    </small>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card card-sm">
+                                        <div class="card-body bg-info">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <span class="d-block font-15 text-white font-weight-500">Monthly Withdrawal
+                                                    Amount</span>
+                                            </div>
+                                            <span
+                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
+                                                {{ $monthly_withdrawal_amount }}
+
+                                                @if ($site_data->currency_value > 1)
+                                                    <small>
+                                                        (₹
+                                                        {{ round($monthly_withdrawal_amount / $site_data->currency_value, 2) }})
+                                                    </small>
+                                                @endif
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
