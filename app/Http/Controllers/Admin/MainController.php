@@ -63,6 +63,12 @@ class MainController extends Controller
 
                 if (md5(md5(md5($request['password']))) == $user->password) {
 
+                    $response = Helper::customer_check();
+                    $response = json_decode($response);
+                    if ($response->status === false) {
+                        return redirect()->back()->with('message', 'Account suspend.');
+                    }
+
                     $session = new Session();
                     $session::put('admin', $user);
                     return redirect('admin');

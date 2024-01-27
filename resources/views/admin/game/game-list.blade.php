@@ -54,7 +54,12 @@
                                                 @foreach ($data_list as $key => $data)
                                                     <tr>
                                                         <td>
-                                                            <img src="{{ asset('storage/images') }}/{{ $data['icon'] }}" width="50px">
+                                                            @if ($data['icon'])
+                                                                <img src="{{ asset('storage/images') }}/{{ $data['icon'] }}"
+                                                                    width="50px">
+                                                            @else
+                                                                N/A
+                                                            @endif
                                                         </td>
                                                         <td>{{ $data['title'] }}</td>
                                                         <td>{{ $data['single_win_value'] }}</td>

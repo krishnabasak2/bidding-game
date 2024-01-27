@@ -59,8 +59,6 @@ class Bid extends Controller
 
             $game_result = GamesResult::where('id', $request['result_id'])->with('getTime')->first();
 
-            // dd($game_result['getTime']['stop_time']);
-
             if (empty($game_result)) {
                 return response()->json(['status' => false, 'message' => 'Game not found.', 'data' => null], 400);
             }
@@ -71,22 +69,16 @@ class Bid extends Controller
             }
 
             $settings = SiteSetting::first();
-            $user_bids = BidsHistory::where(['user_id' => Auth::id()])->whereDate('created_at', Carbon::today())->get();
-            $user_data = User::where('id', Auth::id())->first();
+            $user_bids = BidsHistory::where(['user_id' => Auth::id()])->where('result_id', $request['result_id'])->get();
 
+            $user_data = User::where('id', Auth::id())->first();
             $user_settings = json_decode($user_data->game_settings, true);
 
-            if ($user_settings['setting'] == 'on') {
-                $max_amount = $user_settings['max_bid_amo'];
-                $max_single_num = $user_settings['max_single_bid_num'];
-            } else {
-                $max_amount = $settings->max_bet_amount;
-                $max_single_num = $settings->max_single_bet;
-            }
+            $max_single_bid_amo = $settings->max_bet_amount;
+            $max_single_num = $settings->max_single_bet;
 
-            // maximum bidding amount check
+            // wallet balance check
             $total_req_bid_amo = 0;
-            $user_total_bids_amo = $user_bids->sum('bid_amount');
 
             foreach ($request['bids'] as $value) {
                 $total_req_bid_amo = $total_req_bid_amo + $value['amount'];
@@ -96,17 +88,41 @@ class Bid extends Controller
                 return response()->json(['status' => false, 'message' => 'Insufficient wallet balance.', 'data' => null], 400);
             }
 
-            if ($max_amount < ($user_total_bids_amo + $total_req_bid_amo)) {
-                return response()->json(['status' => false, 'message' => "Maximum bidding amount is $max_amount", 'data' => null], 400);
-            }
-
-            // how many single number can bids checks
+            // all single checks
             if ($request['type'] == '1') {
+
+                if ($user_settings['setting'] == 'on') {
+                    $max_amount = $user_settings['max_bid_amo'];
+
+                    $user_total_bids_amo = $user_bids->sum('bid_amount');
+                    if ($max_amount < ($user_total_bids_amo + $total_req_bid_amo)) {
+                        return response()->json(['status' => false, 'message' => "Maximum bidding amount is $max_amount", 'data' => null], 400);
+                    }
+
+                    if ($settings->max_single_bet > $user_settings['max_single_bid_num']) {
+                        $max_single_num = $user_settings['max_single_bid_num'];
+                    }
+                }
+
+                // how much amount each single number can bids checks
+                foreach ($request['bids'] as $bid) {
+                    $biddata = $user_bids->where('bid_number', $bid['number'])->sum('bid_amount');
+                    if ($biddata > 0) {
+                        if (($biddata + $bid['amount']) > $max_single_bid_amo) {
+                            return response()->json(['status' => false, 'message' => "Maximum bidding amount each number is $max_single_bid_amo", 'data' => null], 400);
+                        }
+                    } else {
+                        if ($bid['amount'] > $max_single_bid_amo) {
+                            return response()->json(['status' => false, 'message' => "Maximum bidding amount each number is $max_single_bid_amo", 'data' => null], 400);
+                        }
+                    }
+                }
+
+                // how many single number can bids checks
                 $total_single_bids = $user_bids->where('game_type', '1');
                 $total_single_num = $user_bids->where('game_type', '1')->groupBy('bid_number');
                 $total_single_num = count($total_single_num);
 
-                // return response()->json(['data' => $total_single_num]);
 
                 if ($total_single_num > 0) {
                     foreach ($request['bids'] as $bid) {
@@ -124,10 +140,9 @@ class Bid extends Controller
                             $total_single_num = $total_single_num + 1;
                         }
                     }
+                } else {
+                    $total_single_num = count($request['bids']);
                 }
-                // return response()->json(['data' => $total_single_num]);
-
-
 
                 if ($max_single_num < $total_single_num) {
                     return response()->json(['status' => false, 'message' => "Maximum bidding number is $max_single_num", 'data' => null], 400);
@@ -159,7 +174,7 @@ class Bid extends Controller
     {
         try {
             $game_title = GamesList::select('title')->where('id', $game_id)->first();
-            $data = BidsHistory::where(['user_id' => Auth::id(), 'game_id' => $game_id])->orderBy('id', 'DESC')->with('time')->paginate(200);
+            $data = BidsHistory::where(['user_id' => Auth::id(), 'game_id' => $game_id])->orderBy('id', 'DESC')->with('time')->paginate(500);
             return response()->json(['status' => true, 'message' => "Transaction list", 'data' => $data, 'game_title' => $game_title], 200);
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'message' => 'Internal server errors.', 'data' => null], 500);

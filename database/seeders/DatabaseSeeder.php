@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'Admin Panel',
             'user_id' => 1,
-            'email' => 'admin@admin.com',
+            'email' => 'admin@admin.admin',
             'role'  => '0',
             'password' => md5(md5(md5('123456')))
         ]);

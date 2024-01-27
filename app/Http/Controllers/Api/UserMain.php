@@ -75,8 +75,8 @@ class UserMain extends Controller
             $user = User::where('phone', $request['phone'])->first();
             if (!empty($user) && $user->status == '1') {
 
-                // if (md5(md5(md5($request['password']))) == $user->password) {
                 if (Hash::check($request['password'], $user->password)) {
+                    $user->tokens()->where('tokenable_id', $user->id)->delete();
                     $token = $user->createToken('myApp')->plainTextToken;
                     return response()->json(['status' => true, 'token' => $token, 'message' => 'Login successful.', 'data' => null], 200);
                 } else {
@@ -108,20 +108,13 @@ class UserMain extends Controller
         try {
             $user = User::where(['id' => Auth::id(), 'status' => '1'])->first();
             if (!empty($user)) {
-                $response = Helper::customer_check();
-                $response = json_decode($response);
-
-                if ($response->status === true) {
-                    if ($user->referer_uid) {
-                        $refer = User::where('id', $user->referer_uid)->first();
-                        $refer = $refer['phone'];
-                    } else {
-                        $refer = null;
-                    }
-                    return response()->json(['status' => true, 'user' => $user, 'refer' => $refer, 200]);
+                if ($user->referer_uid) {
+                    $refer = User::where('id', $user->referer_uid)->first();
+                    $refer = $refer['phone'];
                 } else {
-                    return response()->json(['status' => false, 'user' => null, 400]);
+                    $refer = null;
                 }
+                return response()->json(['status' => true, 'user' => $user, 'refer' => $refer, 200]);
             } else {
                 return response()->json(['status' => false, 'user' => null, 400]);
             }
@@ -430,7 +423,7 @@ class UserMain extends Controller
     public function transaction()
     {
         try {
-            $data = Transaction::where('user_id', Auth::id())->orderBy('id', 'DESC')->paginate(20);
+            $data = Transaction::where('user_id', Auth::id())->orderBy('id', 'DESC')->paginate(500);
 
             // dd($data->toArray());
             return response()->json(['status' => true, 'message' => "Transaction list", 'data' => $data], 200);

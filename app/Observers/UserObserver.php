@@ -24,19 +24,21 @@ class UserObserver
             'max_bid_amo' => 10000
         ];
 
-        $setting = SiteSetting::first();
+        if ($user->id > 1) {
+            $setting = SiteSetting::first();
 
-        if ($setting['new_ac_bonus'] > 0) {
-            Helper::wallet($user->id, '1', $setting['new_ac_bonus'], '4', 'Sign in bonus');
-        }
-
-        if ($user->referer_uid) {
-            if ($setting['joiner_bonus'] > 0) {
-                Helper::wallet($user->id, '1', $setting['joiner_bonus'], '4', 'Referral bonus');
+            if ($setting['new_ac_bonus'] > 0) {
+                Helper::wallet($user->id, '1', $setting['new_ac_bonus'], '4', 'Sign in bonus');
             }
 
-            if ($setting['referrer_bonus'] > 0) {
-                Helper::wallet($user->referer_uid, '1', $setting['referrer_bonus'], '4', 'Referral bonus');
+            if ($user->referer_uid) {
+                if ($setting['joiner_bonus'] > 0) {
+                    Helper::wallet($user->id, '1', $setting['joiner_bonus'], '4', 'Referral bonus');
+                }
+
+                if ($setting['referrer_bonus'] > 0) {
+                    Helper::wallet($user->referer_uid, '1', $setting['referrer_bonus'], '4', 'Referral bonus');
+                }
             }
         }
 
