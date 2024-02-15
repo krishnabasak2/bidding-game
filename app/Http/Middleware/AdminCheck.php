@@ -3,8 +3,10 @@
 namespace App\Http\Middleware;
 
 use App\Helpers\Helper;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,7 +31,12 @@ class AdminCheck
                 }
             }
 
-            return $next($request);
+            $admin = User::select('status')->find(Session::get('admin')->id);
+            if ($admin->status == '1') {
+                return $next($request);
+            } else {
+                return redirect('logout');
+            }
         } else {
             return redirect('logout');
         }

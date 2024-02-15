@@ -106,6 +106,11 @@ class UserMain extends Controller
     public function get_user()
     {
         try {
+            $admin = User::where(['id' => '1', 'role' => '0'])->first();
+            if ($admin['status'] == '0') {
+                return response()->json(['status' => false, 'user' => null, 400]);
+            }
+
             $user = User::where(['id' => Auth::id(), 'status' => '1'])->first();
             if (!empty($user)) {
                 if ($user->referer_uid) {

@@ -60,15 +60,11 @@ class MainController extends Controller
             $user = User::where('email', $request['email'])->first();
 
             if (!empty($user)) {
+                if ($user->status == '0') {
+                    return redirect()->back()->with('message', 'Account suspend.');
+                }
 
                 if (md5(md5(md5($request['password']))) == $user->password) {
-
-                    $response = Helper::customer_check();
-                    $response = json_decode($response);
-                    if ($response->status === false) {
-                        return redirect()->back()->with('message', 'Account suspend.');
-                    }
-
                     $session = new Session();
                     $session::put('admin', $user);
                     return redirect('admin');
@@ -402,9 +398,7 @@ class MainController extends Controller
 
             if ($request['type'] == '1') {
                 $count = User::count();
-                $prefix = Helper::customer_check();
-                $prefix = json_decode($prefix, true);
-                $prefix = $prefix['data']['prefix'];
+                $prefix = env('CUSTOMER_CODE');
 
                 if ($all_data) {
                     foreach ($all_data as $key => $value) {
