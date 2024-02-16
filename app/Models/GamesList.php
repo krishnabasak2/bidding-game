@@ -21,6 +21,24 @@ class GamesList extends Model
 
     public function get_last_time(): HasOne
     {
-        return $this->hasOne(GamesTime::class, 'game_id', 'id')->latest('start_time');
+        $current_day = date("l");
+        $day = '';
+        if ($current_day == 'Monday') {
+            $day = '1';
+        } elseif ($current_day == 'Tuesday') {
+            $day = '2';
+        } elseif ($current_day == 'Wednesday') {
+            $day = '3';
+        } elseif ($current_day == 'Thursday') {
+            $day = '4';
+        } elseif ($current_day == 'Friday') {
+            $day = '5';
+        } elseif ($current_day == 'Saturday') {
+            $day = '6';
+        } elseif ($current_day == 'Sunday') {
+            $day = '0';
+        }
+
+        return $this->hasOne(GamesTime::class, 'game_id', 'id')->whereJsonContains('game_days', $day)->where('status', '1')->latest('start_time');
     }
 }

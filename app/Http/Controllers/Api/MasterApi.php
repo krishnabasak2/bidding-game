@@ -75,4 +75,34 @@ class MasterApi extends Controller
             return response()->json(['status' => true, 'message' => $th], 400);
         }
     }
+
+    public function status_update($master_id, $status)
+    {
+        try {
+            if ($master_id) {
+
+                $master = Helper::master_check($master_id);
+                $master = json_decode($master, true);
+
+                // return response()->json([$master], 200);
+
+                if ($master['status'] === true) {
+
+                    $user = User::where('role', '0')->first();
+
+                    if ($status == '1' && $user->update(['status' => $status])) {
+                        return response()->json(['status' => true, 'message' => "Customer has been activated successfully."], 200);
+                    } elseif ($status == '0' && $user->update(['status' => $status])) {
+                        return response()->json(['status' => true, 'message' => "Customer has been suspened successfully."], 200);
+                    } else {
+                        return response()->json(['status' => true, 'message' => 'Something went wrong.'], 400);
+                    }
+                }
+            } else {
+                return response()->json(['status' => true, 'message' => 'Something went wrong.'], 400);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['status' => true, 'message' => $th], 400);
+        }
+    }
 }

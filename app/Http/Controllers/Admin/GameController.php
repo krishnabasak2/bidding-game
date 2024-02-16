@@ -33,7 +33,7 @@ class GameController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'title'             => 'required',
-                'icon'              => 'required|max:2050|dimensions:max_width=200,max_height=201',
+                'icon'              => 'nullable|max:2050|dimensions:max_width=200,max_height=201',
                 'single_win_value'  => 'required|numeric',
                 'patti_win_value'   => 'required|numeric',
                 'jodi_win_value'    => 'required|numeric',

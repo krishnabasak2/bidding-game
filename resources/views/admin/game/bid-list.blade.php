@@ -92,7 +92,7 @@
                                                         </td>
                                                         <td>
                                                             @php
-                                                                $current_time = date('H:s');
+                                                                $current_time = date('H:i');
                                                             @endphp
 
                                                             @if ($item->time->stop_time > $current_time && $item->result->status == '0')

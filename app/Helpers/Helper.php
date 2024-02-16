@@ -18,9 +18,7 @@ class Helper
             $prefix_zero = $prefix_zero . '0';
         }
 
-        $prefix = self::customer_check();
-        $prefix = json_decode($prefix, true);
-        $prefix = $prefix['data']['prefix'];
+        $prefix = env('CUSTOMER_CODE');
         return $prefix . $prefix_zero . $user_id;
     }
 
@@ -34,9 +32,7 @@ class Helper
             $prefix_zero = $prefix_zero . '0';
         }
 
-        $prefix = self::customer_check();
-        $prefix = json_decode($prefix, true);
-        $prefix = $prefix['data']['prefix'];
+        $prefix = env('CUSTOMER_CODE');
         return $prefix . $pre . $prefix_zero . $txn_id;
     }
 
@@ -73,9 +69,7 @@ class Helper
         }
 
         if ($user->update(['wallet' => $balance])) {
-            $prefix = self::customer_check();
-            $prefix = json_decode($prefix, true);
-            $prefix = $prefix['data']['prefix'];
+            $prefix = env('CUSTOMER_CODE');
 
             $tranId = $prefix . rand(100000, 999999);
             self::transaction($user_id, $tranId, $amount, $type, $for, $balance, $remarks);

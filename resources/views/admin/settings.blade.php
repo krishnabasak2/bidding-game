@@ -162,7 +162,7 @@
                                                 @php
                                                     $banner = json_decode($settings_data->baner, true);
                                                 @endphp
-                                                @if ($banner && count($banner) > 1)
+                                                @if ($banner && count($banner) > 0)
                                                     @foreach ($banner as $item)
                                                         <div class="col-md-4">
                                                             <img src="{{ asset('storage/images') }}/{{ $item }}"

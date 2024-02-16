@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Helpers\Helper;
 use App\Models\BidsHistory;
+use App\Models\Deposit;
+use App\Models\Payout;
 use App\Models\PayoutSetting;
 use App\Models\SiteSetting;
 use App\Models\Transaction;
@@ -24,19 +26,21 @@ class UserObserver
             'max_bid_amo' => 10000
         ];
 
-        $setting = SiteSetting::first();
+        if ($user->id > 1) {
+            $setting = SiteSetting::first();
 
-        if ($setting['new_ac_bonus'] > 0) {
-            Helper::wallet($user->id, '1', $setting['new_ac_bonus'], '4', 'Sign in bonus');
-        }
-
-        if ($user->referer_uid) {
-            if ($setting['joiner_bonus'] > 0) {
-                Helper::wallet($user->id, '1', $setting['joiner_bonus'], '4', 'Referral bonus');
+            if ($setting['new_ac_bonus'] > 0) {
+                Helper::wallet($user->id, '1', $setting['new_ac_bonus'], '4', 'Sign in bonus');
             }
 
-            if ($setting['referrer_bonus'] > 0) {
-                Helper::wallet($user->referer_uid, '1', $setting['referrer_bonus'], '4', 'Referral bonus');
+            if ($user->referer_uid) {
+                if ($setting['joiner_bonus'] > 0) {
+                    Helper::wallet($user->id, '1', $setting['joiner_bonus'], '4', 'Referral bonus');
+                }
+
+                if ($setting['referrer_bonus'] > 0) {
+                    Helper::wallet($user->referer_uid, '1', $setting['referrer_bonus'], '4', 'Referral bonus');
+                }
             }
         }
 
@@ -59,6 +63,8 @@ class UserObserver
         Transaction::where('user_id', $user->id)->delete();
         BidsHistory::where('user_id', $user->id)->delete();
         PayoutSetting::where('user_id', $user->id)->delete();
+        Payout::where('user_id', $user->id)->delete();
+        Deposit::where('user_id', $user->id)->delete();
     }
 
     /**
@@ -69,6 +75,8 @@ class UserObserver
         Transaction::where('user_id', $user->id)->onlyTrashed()->restore();
         BidsHistory::where('user_id', $user->id)->onlyTrashed()->restore();
         PayoutSetting::where('user_id', $user->id)->onlyTrashed()->restore();
+        Payout::where('user_id', $user->id)->restore();
+        Deposit::where('user_id', $user->id)->restore();
     }
 
     /**
@@ -79,5 +87,7 @@ class UserObserver
         Transaction::where('user_id', $user->id)->withTrashed()->forceDelete();
         BidsHistory::where('user_id', $user->id)->withTrashed()->forceDelete();
         PayoutSetting::where('user_id', $user->id)->withTrashed()->forceDelete();
+        Payout::where('user_id', $user->id)->forceDelete();
+        Deposit::where('user_id', $user->id)->forceDelete();
     }
 }

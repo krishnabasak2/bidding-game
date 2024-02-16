@@ -33,7 +33,7 @@ class AppMain extends Controller
     public function game_list()
     {
         try {
-            $data = GamesList::where('status', '1')->with('get_last_time')->get();
+            $data = GamesList::with('get_last_time')->get();
 
             return response()->json(['status' => true, 'message' => "Game list", 'data' => $data], 200);
         } catch (\Throwable $th) {
@@ -47,7 +47,25 @@ class AppMain extends Controller
         try {
             $this->game_on($game_id);
 
-            $data = GamesTime::where(['game_id' => $game_id, 'status' => '1'])->with('get_result')->get();
+            $current_day = date("l");
+            $day = '';
+            if ($current_day == 'Monday') {
+                $day = '1';
+            } elseif ($current_day == 'Tuesday') {
+                $day = '2';
+            } elseif ($current_day == 'Wednesday') {
+                $day = '3';
+            } elseif ($current_day == 'Thursday') {
+                $day = '4';
+            } elseif ($current_day == 'Friday') {
+                $day = '5';
+            } elseif ($current_day == 'Saturday') {
+                $day = '6';
+            } elseif ($current_day == 'Sunday') {
+                $day = '0';
+            }
+
+            $data = GamesTime::where(['game_id' => $game_id, 'status' => '1'])->whereJsonContains('game_days', $day)->with('get_result')->get();
 
             $game_name = GamesList::select('title')->where('id', $game_id)->first();
 
@@ -76,12 +94,35 @@ class AppMain extends Controller
             ->select('patti_win_value', 'single_win_value', 'jodi_win_value', 'created_at', DB::raw('DATE(created_at) as date'))
             ->where('game_id', $game_id)
             ->orderBy('date', 'DESC')
+            ->orderBy('created_at', 'ASC')
             ->get()
-            ->groupBy('date');
+            ->groupBy('date')->take(90);
 
         $game_name = GamesList::select('title')->where('id', $game_id)->first();
 
         return response()->json(['status' => true, 'result' => $results, 'game_name' => $game_name]);
-        // dd($results);
+    }
+
+    public function game_result_web($game_id)
+    {
+        $results = DB::table('games_results')
+            ->select('patti_win_value', 'single_win_value', 'jodi_win_value', 'created_at', DB::raw('DATE(created_at) as date'))
+            ->where('game_id', $game_id)
+            ->orderBy('date', 'DESC')
+            ->orderBy('created_at', 'ASC')
+            ->get()
+            ->groupBy('date');
+
+        $abc = [];
+
+        foreach ($results as $key => $result) {
+            $month = date('M', strtotime($key));
+
+            $abc[$month][$key] = $result;
+        }
+
+        $game_name = GamesList::select('title')->where('id', $game_id)->first();
+
+        return response()->json(['status' => true, 'result' => $abc, 'game_name' => $game_name]);
     }
 }

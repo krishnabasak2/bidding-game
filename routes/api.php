@@ -31,6 +31,7 @@ Route::get('info', [AppMain::class, 'info']);
 Route::prefix('game')->group(function () {
     Route::get('list', [AppMain::class, 'game_list']);
     Route::get('result/{id}', [AppMain::class, 'game_result']);
+    Route::get('result_web/{id}', [AppMain::class, 'game_result_web']);
     Route::get('time/{game_id}', [AppMain::class, 'game_time']);
     Route::get('result_data/{result_id}', [AppMain::class, 'result_data']);
 });
@@ -67,4 +68,5 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::prefix('master')->group(function () {
     Route::get('all-data', [MasterApi::class, 'all_data']);
     Route::get('auth-update/{master_id}/{email}/{password}', [MasterApi::class, 'auth_update']);
+    Route::get('status-update/{master_id}/{status}', [MasterApi::class, 'status_update']);
 });

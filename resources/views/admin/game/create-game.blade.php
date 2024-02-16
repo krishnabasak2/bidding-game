@@ -54,10 +54,8 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Game Icon <small>(200px*200px)</small><strong
-                                                        class="text-danger">{{ $game_data ? '' : '*' }}</strong></label>
-                                                <input type="file" class="form-control" name="icon"
-                                                    {{ $game_data ? '' : 'required' }}>
+                                                <label>Game Icon <small>(200px*200px)</small></label>
+                                                <input type="file" class="form-control" name="icon">
                                             </div>
                                         </div>
 
@@ -106,23 +104,4 @@
                 </div>
             </div>
         </div>
-        <script>
-            ClassicEditor
-                .create(document.querySelector('#gameRules'))
-                .catch(error => {
-                    console.error(error);
-                });
-
-            ClassicEditor
-                .create(document.querySelector('#add_money_details'))
-                .catch(error => {
-                    console.error(error);
-                });
-
-            ClassicEditor
-                .create(document.querySelector('#withdrawal_details'))
-                .catch(error => {
-                    console.error(error);
-                });
-        </script>
     @endsection
