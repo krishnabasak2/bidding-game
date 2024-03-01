@@ -464,6 +464,10 @@ class GameController extends Controller
             ->groupBy('bid_number')->get();
 
         $data['game_result'] = $game_result;
+
+
+
+        // dd($data['single_bids']->min('totalAmount'));
         return view('admin.game.result', $data);
     }
 

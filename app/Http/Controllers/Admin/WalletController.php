@@ -91,13 +91,13 @@ class WalletController extends Controller
 
         if ($type == 'request') {
             $data['title'] = 'New Deposit Requests';
-            $data_list = Deposit::where(['status' => '2'])->with('user')->get();
+            $data_list = Deposit::where(['status' => '2'])->with('user')->orderBy('id', 'DESC')->get();
         } elseif ($type == 'approved') {
             $data['title'] = 'Approved Deposits';
-            $data_list = Deposit::where(['status' => '1'])->with('user')->get();
+            $data_list = Deposit::where(['status' => '1'])->with('user')->orderBy('id', 'DESC')->get();
         } elseif ($type == 'rejected') {
             $data['title'] = 'Rejected Deposits';
-            $data_list = Deposit::where(['status' => '0'])->with('user')->get();
+            $data_list = Deposit::where(['status' => '0'])->with('user')->orderBy('id', 'DESC')->get();
         } else {
             return redirect()->back();
         }
@@ -116,13 +116,13 @@ class WalletController extends Controller
 
         if ($type == 'request') {
             $data['title'] = 'New Payout Requests';
-            $data_list = Payout::where(['status' => '2'])->with('user')->get();
+            $data_list = Payout::where(['status' => '2'])->with('user')->orderBy('id', 'DESC')->get();
         } elseif ($type == 'approved') {
             $data['title'] = 'Approved Payouts';
-            $data_list = Payout::where(['status' => '1'])->with('user')->get();
+            $data_list = Payout::where(['status' => '1'])->with('user')->orderBy('id', 'DESC')->get();
         } elseif ($type == 'rejected') {
             $data['title'] = 'Rejected Payouts';
-            $data_list = Payout::where(['status' => '0'])->with('user')->get();
+            $data_list = Payout::where(['status' => '0'])->with('user')->orderBy('id', 'DESC')->get();
         } else {
             return redirect()->back();
         }

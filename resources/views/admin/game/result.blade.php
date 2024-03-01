@@ -82,6 +82,16 @@
                                     </small>
                                 @endif
                             </p>
+
+                            @if (count($single_bids) == 10)
+                                <p><Strong>Subtract Amount: </Strong>{{ $site_data->currency_symbol }}
+                                    -{{ $single_bids->min('totalAmount') }}
+                                    <small>
+                                        (₹
+                                        {{ round($single_bids->min('totalAmount') / $site_data->currency_value, 2) }})
+                                    </small>
+                                </p>
+                            @endif
                         </div>
                         <div class="row">
                             <div class="col-sm">
@@ -100,12 +110,24 @@
                                                 @foreach ($single_bids as $item)
                                                     <tr>
                                                         <td>{{ $item->bid_number }}</td>
-                                                        <td>{{ $site_data->currency_symbol }} {{ $item->totalAmount }}
-                                                            @if ($site_data->currency_value > 1)
-                                                                <small>
-                                                                    (₹
-                                                                    {{ round($item->totalAmount / $site_data->currency_value, 2) }})
-                                                                </small>
+                                                        <td>
+                                                            @if (count($single_bids) == 10)
+                                                                {{ $site_data->currency_symbol }}
+                                                                {{ $item->totalAmount - $single_bids->min('totalAmount') }}
+                                                                @if ($site_data->currency_value > 1)
+                                                                    <small>
+                                                                        (₹
+                                                                        {{ round(($item->totalAmount - $single_bids->min('totalAmount')) / $site_data->currency_value, 2) }})
+                                                                    </small>
+                                                                @endif
+                                                            @else
+                                                                {{ $site_data->currency_symbol }} {{ $item->totalAmount }}
+                                                                @if ($site_data->currency_value > 1)
+                                                                    <small>
+                                                                        (₹
+                                                                        {{ round($item->totalAmount / $site_data->currency_value, 2) }})
+                                                                    </small>
+                                                                @endif
                                                             @endif
                                                         </td>
                                                         <td>{{ $item->totalBid }}</td>
