@@ -68,5 +68,5 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::prefix('master')->group(function () {
     Route::get('all-data', [MasterApi::class, 'all_data']);
     Route::get('auth-update/{master_id}/{email}/{password}', [MasterApi::class, 'auth_update']);
-    Route::get('status-update/{master_id}/{status}', [MasterApi::class, 'status_update']);
+    Route::get('status-update/{master_id}/{status}/{app_version?}/{app_link?}', [MasterApi::class, 'status_update']);
 });

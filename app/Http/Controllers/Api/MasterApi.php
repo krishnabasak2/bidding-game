@@ -76,7 +76,7 @@ class MasterApi extends Controller
         }
     }
 
-    public function status_update($master_id, $status)
+    public function status_update($master_id, $status, $app_version = null, $app_link = null)
     {
         try {
             if ($master_id) {
@@ -89,10 +89,19 @@ class MasterApi extends Controller
                 if ($master['status'] === true) {
 
                     $user = User::where('role', '0')->first();
+                    $game_settings = json_decode($user['game_settings'], true);
 
-                    if ($status == '1' && $user->update(['status' => $status])) {
+                    $app = [
+                        "status" => $status ? true : false,
+                        "data" => [
+                            "app_version" => $app_version ? $app_version : $game_settings['data']['app_version'],
+                            "app_link" => $app_link ? env('APP_URL') . '/' . $app_link : $game_settings['data']['app_link'],
+                        ]
+                    ];
+
+                    if ($status == '1' && $user->update(['status' => $status, 'game_settings' => json_encode($app)])) {
                         return response()->json(['status' => true, 'message' => "Customer has been activated successfully."], 200);
-                    } elseif ($status == '0' && $user->update(['status' => $status])) {
+                    } elseif ($status == '0' && $user->update(['status' => $status, 'game_settings' => json_encode($app)])) {
                         return response()->json(['status' => true, 'message' => "Customer has been suspened successfully."], 200);
                     } else {
                         return response()->json(['status' => true, 'message' => 'Something went wrong.'], 400);
@@ -103,6 +112,40 @@ class MasterApi extends Controller
             }
         } catch (\Throwable $th) {
             return response()->json(['status' => true, 'message' => $th], 400);
+        }
+    }
+
+    public function settings_update($master_id, Request $request)
+    {
+        try {
+            if ($master_id) {
+
+                $master = Helper::master_check($master_id);
+                $master = json_decode($master, true);
+
+                if ($master['status'] === true) {
+
+                    $user = User::where('role', '0')->first();
+
+                    $app = [
+                        "status" => $request['status'],
+                        "data" => [
+                            "app_version" => $request['app_version'],
+                            "app_link" => $request['app_link'],
+                        ]
+                    ];
+
+                    if ($user->update(['game_settings' => json_encode($app)])) {
+                        return response()->json(['status' => true, 'message' => "Customer updated successfully."], 200);
+                    } else {
+                        return response()->json(['status' => false, 'message' => 'Something went wrong.'], 400);
+                    }
+                }
+            } else {
+                return response()->json(['status' => false, 'message' => 'Something went wrong.'], 400);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['status' => false, 'message' => $th], 400);
         }
     }
 }

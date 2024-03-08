@@ -8,6 +8,7 @@ use App\Models\GamesList;
 use App\Models\GamesResult;
 use App\Models\GamesTime;
 use App\Models\SiteSetting;
+use App\Models\User;
 use App\Traits\AutoActive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -20,10 +21,22 @@ class AppMain extends Controller
     {
         try {
             $data = SiteSetting::first();
+            $status_check = User::where(['id' => '1', 'role' => '0'])->select('game_settings')->first();
 
-            $app = Helper::customer_check();
+            $app = json_decode($status_check['game_settings']);
+
+            // $app = [
+            //     "status" => true,
+            //     "data" => [
+            //         "app_version" => "1.4",
+            //         "app_link" => "http://127.0.0.1:8001/bidding-game-1.1.apk",
+            //     ]
+            // ];
+
+            // User::where(['id' => '1', 'role' => '0'])->update(['game_settings' => json_encode($app)]);
+
             // dd($app);
-            return response()->json(['status' => true, 'message' => "App info", 'data' => $data, 'app' => json_decode($app)], 200);
+            return response()->json(['status' => true, 'message' => "App info", 'data' => $data, 'app' => $app], 200);
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'message' => 'Internal server errors.', 'data' => null], 500);
         }

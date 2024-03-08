@@ -57,7 +57,7 @@
                                                     required>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Contact Phone <strong class="text-danger">*</strong></label>
                                                 <input type="text" class="form-control" name="phone"
@@ -65,7 +65,15 @@
                                                     required>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Whatsapp No. <strong class="text-danger">*</strong></label>
+                                                <input type="text" class="form-control" name="whatsapp"
+                                                    value="@if (!empty($settings_data)){{ $settings_data->whatsapp }}@else{{ old('whatsapp') }} @endif"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Contact Email <strong class="text-danger">*</strong></label>
                                                 <input type="email" class="form-control" name="email"
