@@ -17,12 +17,21 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
+        $app = [
+            "status" => true,
+            "data" => [
+                "app_version" => "1.0",
+                "app_link" => "#",
+            ]
+        ];
+
         \App\Models\User::factory()->create([
             'name' => 'Admin Panel',
             'user_id' => 1,
             'email' => 'admin@admin.admin',
             'role'  => '0',
-            'password' => md5(md5(md5('123456')))
+            'password' => md5(md5(md5('123456'))),
+            'game_settings' => json_encode($app)
         ]);
 
 

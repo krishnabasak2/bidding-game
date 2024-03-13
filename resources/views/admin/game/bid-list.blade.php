@@ -45,6 +45,7 @@
                                                 <th>Bid Number</th>
                                                 <th>Bid Amount</th>
                                                 <th>Win/Loss</th>
+                                                <th>Date & Time</th>
                                                 <th>Manage</th>
                                             </tr>
                                         </thead>
@@ -89,6 +90,9 @@
                                                             @elseif ($item->status == '0')
                                                                 Loss
                                                             @endif
+                                                        </td>
+                                                        <td>
+                                                            {{ date('M j, Y - h:i:s a', strtotime($item['created_at'])) }}
                                                         </td>
                                                         <td>
                                                             @php

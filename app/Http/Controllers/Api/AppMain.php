@@ -10,9 +10,12 @@ use App\Models\GamesTime;
 use App\Models\SiteSetting;
 use App\Models\User;
 use App\Traits\AutoActive;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
 
 class AppMain extends Controller
 {
@@ -137,5 +140,37 @@ class AppMain extends Controller
         $game_name = GamesList::select('title')->where('id', $game_id)->first();
 
         return response()->json(['status' => true, 'result' => $abc, 'game_name' => $game_name]);
+    }
+
+    public function web_game(Request $request)
+    {
+        $token = [
+            'customer_id' => 456456,
+            'user_id' => 45,
+            'unique_id' => date('YmdHi')
+        ];
+
+        $encript = Crypt::encryptString(json_encode($token));
+        $decript = Crypt::decryptString($encript);
+        dd($encript, json_decode($decript, true));
+
+        // try {
+        //     $decript = Crypt::decryptString($request->token);
+        //     dd(json_decode($decript, true));
+        // } catch (\Throwable $th) {
+        //     dd("sdsa");
+        // }
+
+
+        // $encript = base64_encode(json_encode($token));
+        // $decript = base64_decode($encript);
+        // dd($encript, json_decode($decript, true));
+
+        // try {
+        //     $decript = base64_decode($request->token);
+        //     dd(json_decode($decript, true));
+        // } catch (\Throwable $th) {
+        //     dd("Invalid params");
+        // }
     }
 }

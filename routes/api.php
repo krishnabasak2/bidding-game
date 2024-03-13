@@ -70,3 +70,6 @@ Route::prefix('master')->group(function () {
     Route::get('auth-update/{master_id}/{email}/{password}', [MasterApi::class, 'auth_update']);
     Route::get('status-update/{master_id}/{status}/{app_version?}/{app_link?}', [MasterApi::class, 'status_update']);
 });
+
+
+Route::get('web_game', [AppMain::class, 'web_game']);
