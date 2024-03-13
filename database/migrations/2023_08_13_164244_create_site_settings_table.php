@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('app_name')->nullable();
             $table->text('url')->nullable();
             $table->text('phone')->nullable();
+            $table->text('whatsapp')->nullable();
             $table->text('email')->nullable();
             $table->text('currency_word')->nullable();
             $table->text('currency_symbol')->nullable();
