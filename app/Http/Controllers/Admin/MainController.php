@@ -166,8 +166,12 @@ class MainController extends Controller
                 "wd_days"               => "required_if:withdrawal,2",
                 "min_withdraw"          => "required|numeric",
                 "min_add_money"         => "required|numeric",
-                "max_single_bet"        => "required|numeric|max:10",
+                "max_single_bet"        => "required|numeric",
                 "max_bet_amount"        => "required|numeric",
+                "max_jodi_bet"          => "required|numeric",
+                "max_jodi_amount"       => "required|numeric",
+                "max_patti_bet"         => "required|numeric",
+                "max_patti_amount"      => "required|numeric",
             ], [
                 "wd_start_time"         => "Enter a valid start time",
                 "wd_end_time"           => "Enter a valid end time",
@@ -192,6 +196,10 @@ class MainController extends Controller
                 "min_add_money"         => "Minimum Deposit",
                 "max_single_bet"        => "Maximum Single Bidding Number",
                 "max_bet_amount"        => "Maximum Bidding Amount",
+                "max_jodi_bet"          => "Maximum Jodi Bidding Number",
+                "max_jodi_amount"       => "Maximum JOdi Bidding Amount",
+                "max_patti_bet"         => "Maximum Patti Bidding Number",
+                "max_patti_amount"      => "Maximum Patti Bidding Amount",
             ]);
 
             if ($validator->fails()) {
@@ -271,6 +279,11 @@ class MainController extends Controller
                 "min_add_money"         => $request['min_add_money'],
                 "max_single_bet"        => $request['max_single_bet'],
                 "max_bet_amount"        => $request['max_bet_amount'],
+                "max_jodi_bet"          => $request['max_jodi_bet'],
+                "max_jodi_amount"       => $request['max_jodi_amount'],
+                "max_patti_bet"         => $request['max_patti_bet'],
+                "max_patti_amount"      => $request['max_patti_amount'],
+
                 "wd_start_time"         => $request['wd_start_time'] ?? $data['settings_data']['wd_start_time'],
                 "wd_end_time"           => $request['wd_end_time'] ?? $data['settings_data']['wd_end_time'],
                 "wd_days"               => $request['wd_days'] ? json_encode($request['wd_days']) : $data['settings_data']['wd_days'],

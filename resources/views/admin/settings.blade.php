@@ -434,10 +434,47 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Maximum Bidding Amount <strong
+                                                <label>Maximum Single Bidding Amount <strong
                                                         class="text-danger">*</strong></label>
                                                 <input type="number" class="form-control" name="max_bet_amount"
                                                     value="{{ old('max_bet_amount', $settings_data->max_bet_amount) }}"
+                                                    required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Maximum Jodi Bidding Number <strong
+                                                        class="text-danger">*</strong></label>
+                                                <input type="number" class="form-control" name="max_jodi_bet"
+                                                    value="{{ old('max_jodi_bet', $settings_data->max_jodi_bet) }}"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Maximum Jodi Bidding Amount <strong
+                                                        class="text-danger">*</strong></label>
+                                                <input type="number" class="form-control" name="max_jodi_amount"
+                                                    value="{{ old('max_jodi_amount', $settings_data->max_jodi_amount) }}"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Maximum Patti Bidding Number <strong
+                                                        class="text-danger">*</strong></label>
+                                                <input type="number" class="form-control" name="max_patti_bet"
+                                                    value="{{ old('max_patti_bet', $settings_data->max_patti_bet) }}"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Maximum Patti Bidding Amount <strong
+                                                        class="text-danger">*</strong></label>
+                                                <input type="number" class="form-control" name="max_patti_amount"
+                                                    value="{{ old('max_patti_amount', $settings_data->max_patti_amount) }}"
                                                     required>
                                             </div>
                                         </div>

@@ -18,10 +18,12 @@ class SiteSettingSeeder extends Seeder
             'app_name'              => env('APP_NAME'),
             'url'                   => null,
             'phone'                 => '1234567890',
+            'whatsapp'              => '1234567890',
             'email'                 => 'subho7113@gmail.com',
             'url'                   => env('APP_URL'),
             'currency_symbol'       => '₹',
             'currency_word'         => 'INR',
+            'currency_icon'         => 'cash-outline',
             'logo'                  => null,
             'ads'                   => null,
             'baner'                 => null,
@@ -37,6 +39,10 @@ class SiteSettingSeeder extends Seeder
             'min_add_money'         => 100,
             'max_single_bet'        => 10,
             'max_bet_amount'        => 10000,
+            'max_jodi_bet'          => 10,
+            'max_jodi_amount'       => 10000,
+            'max_patti_bet'         => 10,
+            'max_patti_amount'      => 10000,
         ]);
     }
 }

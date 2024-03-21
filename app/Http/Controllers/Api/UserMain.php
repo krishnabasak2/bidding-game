@@ -76,7 +76,7 @@ class UserMain extends Controller
             if (!empty($user) && $user->status == '1') {
 
                 if (Hash::check($request['password'], $user->password)) {
-                    $user->tokens()->where('tokenable_id', $user->id)->delete();
+                    // $user->tokens()->where('tokenable_id', $user->id)->delete();
                     $token = $user->createToken('myApp')->plainTextToken;
                     return response()->json(['status' => true, 'token' => $token, 'message' => 'Login successful.', 'data' => null], 200);
                 } else {

@@ -42,9 +42,9 @@ class UserObserver
                     Helper::wallet($user->referer_uid, '1', $setting['referrer_bonus'], '4', 'Referral bonus');
                 }
             }
-        }
 
-        $user->update(['game_settings' => json_encode($game_setting)]);
+            $user->update(['game_settings' => json_encode($game_setting)]);
+        }
     }
 
     /**

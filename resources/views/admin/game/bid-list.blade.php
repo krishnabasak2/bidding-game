@@ -95,11 +95,12 @@
                                                             {{ date('M j, Y - h:i:s a', strtotime($item['created_at'])) }}
                                                         </td>
                                                         <td>
-                                                            @php
+                                                            {{-- @php
                                                                 $current_time = date('H:i');
                                                             @endphp
 
-                                                            @if ($item->time->stop_time > $current_time && $item->result->status == '0')
+                                                            @if ($item->time->stop_time > $current_time && $item->result->status == '0') --}}
+                                                            @if ($item->result->status == '0')
                                                                 <button class="btn btn-icon btn-danger btn-icon-style-1"
                                                                     data-toggle="tooltip" title="Delete Bid"><i
                                                                         class="btn-icon-wrap fa fa-trash"

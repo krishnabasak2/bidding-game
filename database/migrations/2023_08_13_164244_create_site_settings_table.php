@@ -46,6 +46,10 @@ return new class extends Migration
             $table->decimal('min_add_money', 10, 2)->nullable();
             $table->integer('max_single_bet')->nullable();
             $table->decimal('max_bet_amount', 10, 2)->nullable();
+            $table->integer('max_jodi_bet')->nullable();
+            $table->decimal('max_jodi_amount', 10, 2)->nullable();
+            $table->integer('max_patti_bet')->nullable();
+            $table->decimal('max_patti_amount', 10, 2)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

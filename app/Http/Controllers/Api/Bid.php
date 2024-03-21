@@ -74,9 +74,6 @@ class Bid extends Controller
             $user_data = User::where('id', Auth::id())->first();
             $user_settings = json_decode($user_data->game_settings, true);
 
-            $max_single_bid_amo = $settings->max_bet_amount;
-            $max_single_num = $settings->max_single_bet;
-
             // wallet balance check
             $total_req_bid_amo = 0;
 
@@ -88,17 +85,22 @@ class Bid extends Controller
                 return response()->json(['status' => false, 'message' => 'Insufficient wallet balance.', 'data' => null], 400);
             }
 
-            // all single checks
+            if ($user_settings['setting'] == 'on') {
+                $max_amount = $user_settings['max_bid_amo'];
+
+                $user_total_bids_amo = $user_bids->sum('bid_amount');
+                if ($max_amount < ($user_total_bids_amo + $total_req_bid_amo)) {
+                    return response()->json(['status' => false, 'message' => "Maximum bidding amount is $max_amount", 'data' => null], 400);
+                }
+            }
+
+            // SINGLE CHECKS
             if ($request['type'] == '1') {
 
+                $max_single_bid_amo = $settings->max_bet_amount;
+                $max_single_num = $settings->max_single_bet;
+
                 if ($user_settings['setting'] == 'on') {
-                    $max_amount = $user_settings['max_bid_amo'];
-
-                    $user_total_bids_amo = $user_bids->sum('bid_amount');
-                    if ($max_amount < ($user_total_bids_amo + $total_req_bid_amo)) {
-                        return response()->json(['status' => false, 'message' => "Maximum bidding amount is $max_amount", 'data' => null], 400);
-                    }
-
                     if ($settings->max_single_bet > $user_settings['max_single_bid_num']) {
                         $max_single_num = $user_settings['max_single_bid_num'];
                     }
@@ -109,11 +111,11 @@ class Bid extends Controller
                     $biddata = $user_bids->where('bid_number', $bid['number'])->sum('bid_amount');
                     if ($biddata > 0) {
                         if (($biddata + $bid['amount']) > $max_single_bid_amo) {
-                            return response()->json(['status' => false, 'message' => "Maximum bidding amount each number is $max_single_bid_amo", 'data' => null], 400);
+                            return response()->json(['status' => false, 'message' => "Maximum Single bidding amount each number is $max_single_bid_amo", 'data' => null], 400);
                         }
                     } else {
                         if ($bid['amount'] > $max_single_bid_amo) {
-                            return response()->json(['status' => false, 'message' => "Maximum bidding amount each number is $max_single_bid_amo", 'data' => null], 400);
+                            return response()->json(['status' => false, 'message' => "Maximum Single bidding amount each number is $max_single_bid_amo", 'data' => null], 400);
                         }
                     }
                 }
@@ -145,7 +147,105 @@ class Bid extends Controller
                 }
 
                 if ($max_single_num < $total_single_num) {
-                    return response()->json(['status' => false, 'message' => "Maximum bidding number is $max_single_num", 'data' => null], 400);
+                    return response()->json(['status' => false, 'message' => "Maximum Single bidding number is $max_single_num", 'data' => null], 400);
+                }
+
+                // JODI CHECKS
+            } elseif ($request['type'] == '2') {
+                $max_jodi_bid_amo = $settings->max_jodi_amount;
+                $max_jodi_num = $settings->max_jodi_bet;
+
+                // how much amount each jodi number can bids checks
+                foreach ($request['bids'] as $bid) {
+                    $biddata = $user_bids->where('bid_number', $bid['number'])->sum('bid_amount');
+                    if ($biddata > 0) {
+                        if (($biddata + $bid['amount']) > $max_jodi_bid_amo) {
+                            return response()->json(['status' => false, 'message' => "Maximum Jodi bidding amount each number is $max_jodi_bid_amo", 'data' => null], 400);
+                        }
+                    } else {
+                        if ($bid['amount'] > $max_jodi_bid_amo) {
+                            return response()->json(['status' => false, 'message' => "Maximum Jodi bidding amount each number is $max_jodi_bid_amo", 'data' => null], 400);
+                        }
+                    }
+                }
+
+                // how many single number can bids checks
+                $total_jodi_bids = $user_bids->where('game_type', '2');
+                $total_jodi_num = $user_bids->where('game_type', '2')->groupBy('bid_number');
+                $total_jodi_num = count($total_jodi_num);
+
+
+                if ($total_jodi_num > 0) {
+                    foreach ($request['bids'] as $bid) {
+
+                        foreach ($total_jodi_bids as $value) {
+                            if ($bid['number'] == $value['bid_number']) {
+                                $common = true;
+                                break;
+                            } else {
+                                $common = false;
+                            }
+                        }
+
+                        if (!$common) {
+                            $total_jodi_num = $total_jodi_num + 1;
+                        }
+                    }
+                } else {
+                    $total_jodi_num = count($request['bids']);
+                }
+
+                if ($max_jodi_num < $total_jodi_num) {
+                    return response()->json(['status' => false, 'message' => "Maximum Jodi bidding number is $max_jodi_num", 'data' => null], 400);
+                }
+
+                // PATTI CHECKS
+            } elseif ($request['type'] == '3') {
+                $max_patti_bid_amo = $settings->max_patti_amount;
+                $max_patti_num = $settings->max_patti_bet;
+
+                // how much amount each jodi number can bids checks
+                foreach ($request['bids'] as $bid) {
+                    $biddata = $user_bids->where('bid_number', $bid['number'])->sum('bid_amount');
+                    if ($biddata > 0) {
+                        if (($biddata + $bid['amount']) > $max_patti_bid_amo) {
+                            return response()->json(['status' => false, 'message' => "Maximum Patti bidding amount each number is $max_patti_bid_amo", 'data' => null], 400);
+                        }
+                    } else {
+                        if ($bid['amount'] > $max_patti_bid_amo) {
+                            return response()->json(['status' => false, 'message' => "Maximum Patti bidding amount each number is $max_patti_bid_amo", 'data' => null], 400);
+                        }
+                    }
+                }
+
+                // how many single number can bids checks
+                $total_jodi_bids = $user_bids->where('game_type', '2');
+                $total_jodi_num = $user_bids->where('game_type', '2')->groupBy('bid_number');
+                $total_jodi_num = count($total_jodi_num);
+
+
+                if ($total_jodi_num > 0) {
+                    foreach ($request['bids'] as $bid) {
+
+                        foreach ($total_jodi_bids as $value) {
+                            if ($bid['number'] == $value['bid_number']) {
+                                $common = true;
+                                break;
+                            } else {
+                                $common = false;
+                            }
+                        }
+
+                        if (!$common) {
+                            $total_jodi_num = $total_jodi_num + 1;
+                        }
+                    }
+                } else {
+                    $total_jodi_num = count($request['bids']);
+                }
+
+                if ($max_patti_num < $total_jodi_num) {
+                    return response()->json(['status' => false, 'message' => "Maximum Patti bidding number is $max_patti_num", 'data' => null], 400);
                 }
             }
 
