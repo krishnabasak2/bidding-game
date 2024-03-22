@@ -11,6 +11,7 @@ use App\Models\SiteSetting;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -366,6 +367,13 @@ class UserMain extends Controller
                 }
             }
 
+            $limit_check = Payout::where(['user_id' => Auth::id(), 'status' => '1'])->whereDate('created_at', Carbon::today())->count();
+
+            if ($settings->wd_limit != 0) {
+                if ($settings->wd_limit == $limit_check || $settings->wd_limit < $limit_check) {
+                    return response()->json(['status' => false, 'message' => "Minimum payout limit is {$settings->wd_limit}", 'data' => null], 400);
+                }
+            }
 
             if ($settings->min_withdraw > $request['amount']) {
                 return response()->json(['status' => false, 'message' => "Minimum payout amount is {$settings->min_withdraw}", 'data' => null], 400);

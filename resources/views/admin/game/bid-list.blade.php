@@ -100,6 +100,7 @@
                                                             @endphp
 
                                                             @if ($item->time->stop_time > $current_time && $item->result->status == '0') --}}
+                                                            
                                                             @if ($item->result->status == '0')
                                                                 <button class="btn btn-icon btn-danger btn-icon-style-1"
                                                                     data-toggle="tooltip" title="Delete Bid"><i

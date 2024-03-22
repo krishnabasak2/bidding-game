@@ -42,6 +42,7 @@ return new class extends Migration
             $table->text('wd_start_time')->nullable();
             $table->text('wd_end_time')->nullable();
             $table->text('wd_days')->nullable();
+            $table->integer('wd_limit')->default(0);
             $table->decimal('min_withdraw', 10, 2)->nullable();
             $table->decimal('min_add_money', 10, 2)->nullable();
             $table->integer('max_single_bet')->nullable();

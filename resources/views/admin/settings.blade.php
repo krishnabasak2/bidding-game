@@ -323,7 +323,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Game Days<strong class="text-danger">*</strong></label>
                                                 <br>
@@ -383,7 +383,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Start Time<strong class="text-danger">*</strong></label>
                                                 <input type="time" class="form-control" name="wd_start_time"
@@ -392,13 +392,21 @@
                                                     {{ $settings_data->withdrawal == '2' ? '' : 'disabled' }}>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>End Time<strong class="text-danger">*</strong></label>
                                                 <input type="time" id="end" class="form-control"
                                                     name="wd_end_time"
                                                     value="{{ old('wd_end_time', $settings_data->wd_end_time) }}"
                                                     {{ $settings_data->withdrawal == '2' ? '' : 'disabled' }}>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Withdrawal Limit <small>(0 = Unlimited)</small><strong class="text-danger">*</strong></label>
+                                                <input type="number" class="form-control"
+                                                    name="wd_limit"
+                                                    value="{{ old('wd_limit', $settings_data->wd_limit) }}">
                                             </div>
                                         </div>
                                     </div>
