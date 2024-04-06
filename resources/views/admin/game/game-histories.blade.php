@@ -49,12 +49,17 @@
                                                 @foreach ($data_list as $key => $data)
                                                     <tr>
                                                         <td>{{ $key + 1 }}</td>
-                                                        <td>{{ $data->title}}</td>
+                                                        <td>{{ $data->title }}</td>
                                                         <td>
                                                             <a href="{{ url('/') }}/admin/game/history/{{ $data['id'] }}"
                                                                 class="btn btn-icon btn-primary btn-icon-style-1"
                                                                 data-toggle="tooltip" title="View Sub-Games"><i
                                                                     class="btn-icon-wrap fa fa-play"></i></a>
+
+                                                            <a href="{{ url('/') }}/admin/game/report/{{ $data['id'] }}"
+                                                                class="btn btn-icon btn-success btn-icon-style-1"
+                                                                data-toggle="tooltip" title="View Report"><i
+                                                                    class="btn-icon-wrap fa fa-bar-chart"></i></a>
                                                         </td>
                                                     </tr>
                                                 @endforeach

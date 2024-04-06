@@ -581,4 +581,46 @@ class GameController extends Controller
 
         return response()->json(['status' => true, 'message' => 'Distribution Successful.'], 200);
     }
+
+    public function report($game_id, Request $request)
+    {
+        $game = GamesList::where('id', $game_id)->withTrashed()->first();
+        if (empty($game)) {
+            return redirect()->back()->with('message', 'Game not found.');
+        }
+
+        $mainController = new MainController();
+        $data['site_data'] = $mainController->common();
+        $data['title'] = "Report for $game->title";
+        $data['page'] = "Home";
+        $data['report'] = "";
+
+        if (Request()->isMethod('POST')) {
+            $validator = Validator::make($request->all(), [
+                'from_date'    => 'required',
+                'end_date'     => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            // dd($request->all());
+
+            $report = BidsHistory::where('game_id', $game->id)->whereBetween('created_at', [$request['from_date'] . " 00:00:00", $request['end_date'] . " 23:59:59"])->get();
+
+            // echo "<pre>";
+            // print_r($report->toArray());
+            // exit;
+
+            // $data['total_bids'] = count($report);
+            $data['total_bid_amount'] = $report->sum('bid_amount');
+            $data['total_win_amount'] = $report->sum('won_amount');
+
+            // dd($total_win_amount);
+            $data['data_list'] = $report;
+        }
+
+        return view('admin.game.report', $data);
+    }
 }

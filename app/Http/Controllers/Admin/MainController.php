@@ -88,7 +88,7 @@ class MainController extends Controller
         return redirect('login');
     }
 
-    public function dashboard(Request $request)
+    public function dashboard()
     {
         $data['site_data'] = $this->common();
         $data['title'] = 'My Dashboard';
@@ -98,6 +98,11 @@ class MainController extends Controller
         $data['diposit'] = Deposit::where('status', '2')->count();
         $data['payout'] = Payout::where('status', '2')->count();
 
+        return view('admin.dashboard', $data);
+    }
+
+    public function dashboard_data()
+    {
         $data['total_customer'] = User::where('role', '!=', '0')->withTrashed()->count();
 
         $data['total_active_players'] = User::where('role', '!=', '0')->where('status', '1')->count();
@@ -124,7 +129,7 @@ class MainController extends Controller
 
         $data['monthly_withdrawal_amount'] = Payout::where('status', '1')->whereMonth('created_at', Carbon::now()->month)->get()->sum('amount');
 
-        return view('admin.dashboard', $data);
+        return response()->json(['status' => true, "data" => $data]);
     }
 
     public function settings(Request $request)

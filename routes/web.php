@@ -26,6 +26,7 @@ Route::match(['get', 'post'], 'login/{token?}/{login_id?}', [MainController::cla
 
 Route::prefix('admin')->middleware('AdminCheck')->group(function () {
     Route::get('/', [MainController::class, 'dashboard']);
+    Route::get('/dashboard_data', [MainController::class, 'dashboard_data']);
     Route::match(['get', 'post'], 'settings', [MainController::class, 'settings']);
     Route::match(['get', 'post'], 'update-profile', [MainController::class, 'update_profile']);
     Route::match(['get', 'post'], 'change-password', [MainController::class, 'change_password']);
@@ -58,6 +59,8 @@ Route::prefix('admin')->middleware('AdminCheck')->group(function () {
         Route::get('active/{id?}', [GameController::class, 'active_games']);
         Route::match(['get', 'post'], 'result/{time_id}', [GameController::class, 'result']);
         Route::get('distribute/{result_id}', [GameController::class, 'distribute']);
+
+        Route::match(['get', 'post'], 'report/{game_id}', [GameController::class, 'report']);
     });
 
     Route::prefix('wallet')->group(function () {

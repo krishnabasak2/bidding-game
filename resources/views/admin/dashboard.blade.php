@@ -102,7 +102,11 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Total
                                                     Players</span>
                                             </div>
-                                            <span class="d-block display-5 text-white mb-5">{{ $total_customer }}</span>
+                                            <span class="d-block display-5 text-white mb-5" id="total_customer">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -113,16 +117,17 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Total Wallet
                                                     Balance</span>
                                             </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_customer_wallet_balance }}
-
-                                                @if ($site_data->currency_value > 1)
+                                            <span class="d-block display-5 text-white mb-5"
+                                                id="total_customer_wallet_balance">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                {{-- @if ($site_data->currency_value > 1)
                                                     <small>
                                                         (₹
                                                         {{ round($total_customer_wallet_balance / $site_data->currency_value . 2) }})
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </span>
                                         </div>
                                     </div>
@@ -134,16 +139,16 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Total Deposit
                                                     Amount</span>
                                             </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_deposit_amount }}
-
-                                                @if ($site_data->currency_value > 1)
+                                            <span class="d-block display-5 text-white mb-5" id="total_deposit_amount">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                {{-- @if ($site_data->currency_value > 1)
                                                     <small>
                                                         (₹
                                                         {{ round($total_deposit_amount / $site_data->currency_value, 2) }})
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </span>
                                         </div>
                                     </div>
@@ -155,16 +160,16 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Total Withdrawal
                                                     Amount</span>
                                             </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_withdrawal_amount }}
-
-                                                @if ($site_data->currency_value > 1)
+                                            <span class="d-block display-5 text-white mb-5" id="total_withdrawal_amount">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                {{-- @if ($site_data->currency_value > 1)
                                                     <small>
                                                         (₹
                                                         {{ round($total_withdrawal_amount / $site_data->currency_value, 2) }})
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </span>
                                         </div>
                                     </div>
@@ -176,16 +181,16 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Today Bid
                                                     Amount</span>
                                             </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_today_bid_amount }}
-
-                                                @if ($site_data->currency_value > 1)
+                                            <span class="d-block display-5 text-white mb-5" id="total_today_bid_amount">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                {{-- @if ($site_data->currency_value > 1)
                                                     <small>
                                                         (₹
                                                         {{ round($total_today_bid_amount / $site_data->currency_value, 2) }})
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </span>
                                         </div>
                                     </div>
@@ -197,16 +202,16 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Today Win
                                                     Amount</span>
                                             </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_today_win_amount }}
-
-                                                @if ($site_data->currency_value > 1)
+                                            <span class="d-block display-5 text-white mb-5" id="total_today_win_amount">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                {{-- @if ($site_data->currency_value > 1)
                                                     <small>
                                                         (₹
                                                         {{ round($total_today_win_amount / $site_data->currency_value, 2) }})
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </span>
                                         </div>
                                     </div>
@@ -218,16 +223,16 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Today Deposit
                                                     Amount</span>
                                             </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $today_deposit_amount }}
-
-                                                @if ($site_data->currency_value > 1)
+                                            <span class="d-block display-5 text-white mb-5" id="today_deposit_amount">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                {{-- @if ($site_data->currency_value > 1)
                                                     <small>
                                                         (₹
                                                         {{ round($today_deposit_amount / $site_data->currency_value, 2) }})
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </span>
                                         </div>
                                     </div>
@@ -239,16 +244,16 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Today Withdrawal
                                                     Amount</span>
                                             </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $today_withdrawal_amount }}
-
-                                                @if ($site_data->currency_value > 1)
+                                            <span class="d-block display-5 text-white mb-5" id="today_withdrawal_amount">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                {{-- @if ($site_data->currency_value > 1)
                                                     <small>
                                                         (₹
                                                         {{ round($today_withdrawal_amount / $site_data->currency_value, 2) }})
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </span>
                                         </div>
                                     </div>
@@ -260,16 +265,16 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Monthly Bid
                                                     Amount</span>
                                             </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_monthly_bid_amount }}
-
-                                                @if ($site_data->currency_value > 1)
+                                            <span class="d-block display-5 text-white mb-5" id="total_monthly_bid_amount">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                {{-- @if ($site_data->currency_value > 1)
                                                     <small>
                                                         (₹
                                                         {{ round($total_monthly_bid_amount / $site_data->currency_value, 2) }})
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </span>
                                         </div>
                                     </div>
@@ -281,16 +286,16 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Monthly Win
                                                     Amount</span>
                                             </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $total_monthly_win_amount }}
-
-                                                @if ($site_data->currency_value > 1)
+                                            <span class="d-block display-5 text-white mb-5" id="total_monthly_win_amount">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                {{-- @if ($site_data->currency_value > 1)
                                                     <small>
                                                         (₹
                                                         {{ round($total_monthly_win_amount / $site_data->currency_value, 2) }})
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </span>
                                         </div>
                                     </div>
@@ -302,16 +307,16 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Monthly Deposit
                                                     Amount</span>
                                             </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $monthly_deposit_amount }}
-
-                                                @if ($site_data->currency_value > 1)
+                                            <span class="d-block display-5 text-white mb-5" id="monthly_deposit_amount">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                {{-- @if ($site_data->currency_value > 1)
                                                     <small>
                                                         (₹
                                                         {{ round($monthly_deposit_amount / $site_data->currency_value, 2) }})
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </span>
                                         </div>
                                     </div>
@@ -323,16 +328,17 @@
                                                 <span class="d-block font-15 text-white font-weight-500">Monthly Withdrawal
                                                     Amount</span>
                                             </div>
-                                            <span
-                                                class="d-block display-5 text-white mb-5">{{ $site_data->currency_symbol }}
-                                                {{ $monthly_withdrawal_amount }}
-
-                                                @if ($site_data->currency_value > 1)
+                                            <span class="d-block display-5 text-white mb-5"
+                                                id="monthly_withdrawal_amount">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                {{-- @if ($site_data->currency_value > 1)
                                                     <small>
                                                         (₹
                                                         {{ round($monthly_withdrawal_amount / $site_data->currency_value, 2) }})
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </span>
                                         </div>
                                     </div>
@@ -345,3 +351,123 @@
         </div>
 
     @endsection
+
+    @push('page-scripts')
+        <script>
+            let total_customer = 0,
+                total_customer_wallet_balance = 0,
+                total_deposit_amount = 0,
+                total_withdrawal_amount = 0,
+                total_today_bid_amount = 0,
+                total_today_win_amount = 0,
+                today_deposit_amount = 0,
+                today_withdrawal_amount = 0,
+                total_monthly_bid_amount = 0,
+                total_monthly_win_amount = 0,
+                monthly_deposit_amount = 0,
+                monthly_withdrawal_amount = 0;
+
+            let c_total_customer_wallet_balance = '',
+                c_total_deposit_amount = '',
+                c_total_withdrawal_amount = '',
+                c_total_today_bid_amount = '',
+                c_total_today_win_amount = '',
+                c_today_deposit_amount = '',
+                c_today_withdrawal_amount = '',
+                c_total_monthly_bid_amount = '',
+                c_total_monthly_win_amount = '',
+                c_monthly_deposit_amount = '',
+                c_monthly_withdrawal_amount = '';
+
+
+
+            let symbol = `{{ $site_data->currency_symbol }}`;
+            let Value_of_1_INR = `{{ $site_data->currency_value }}`;
+
+            fetch(`{{ url('/') }}/admin/dashboard_data`).then(response => {
+                if ((response.ok) && (response.status === 200)) {
+                    return response.json();
+                } else {
+                    return false;
+                }
+            }).then(data => {
+                console.log(data);
+
+                total_customer = data.data.total_customer;
+
+                total_customer_wallet_balance = Number(data.data.total_customer_wallet_balance);
+                total_deposit_amount = Number(data.data.total_deposit_amount);
+                total_withdrawal_amount = Number(data.data.total_withdrawal_amount);
+                total_today_bid_amount = Number(data.data.total_today_bid_amount);
+                total_today_win_amount = Number(data.data.total_today_win_amount);
+                today_deposit_amount = Number(data.data.today_deposit_amount);
+                today_withdrawal_amount = Number(data.data.today_withdrawal_amount);
+                total_monthly_bid_amount = Number(data.data.total_monthly_bid_amount);
+                total_monthly_win_amount = Number(data.data.total_monthly_win_amount);
+                monthly_deposit_amount = Number(data.data.monthly_deposit_amount);
+                monthly_withdrawal_amount = Number(data.data.monthly_withdrawal_amount);
+
+
+                if (Value_of_1_INR > 1) {
+                    c_total_customer_wallet_balance = '(₹' + Number(data.data.total_customer_wallet_balance /
+                        Value_of_1_INR).toFixed(2) + ')';
+                    c_total_deposit_amount = '(₹' + Number(data.data.total_deposit_amount / Value_of_1_INR).toFixed(2) +
+                        ')';
+                    c_total_withdrawal_amount = '(₹' + Number(data.data.total_withdrawal_amount / Value_of_1_INR)
+                        .toFixed(2) + ')';
+                    c_total_today_bid_amount = '(₹' + Number(data.data.total_today_bid_amount / Value_of_1_INR).toFixed(
+                        2) + ')';
+                    c_total_today_win_amount = '(₹' + Number(data.data.total_today_win_amount / Value_of_1_INR).toFixed(
+                        2) + ')';
+                    c_today_deposit_amount = '(₹' + Number(data.data.today_deposit_amount / Value_of_1_INR).toFixed(2) +
+                        ')';
+                    c_today_withdrawal_amount = '(₹' + Number(data.data.today_withdrawal_amount / Value_of_1_INR)
+                        .toFixed(2) + ')';
+                    c_total_monthly_bid_amount = '(₹' + Number(data.data.total_monthly_bid_amount / Value_of_1_INR)
+                        .toFixed(2) + ')';
+                    c_total_monthly_win_amount = '(₹' + Number(data.data.total_monthly_win_amount / Value_of_1_INR)
+                        .toFixed(2) + ')';
+                    c_monthly_deposit_amount = '(₹' + Number(data.data.monthly_deposit_amount / Value_of_1_INR).toFixed(
+                        2) + ')';
+                    c_monthly_withdrawal_amount = '(₹' + Number(data.data.monthly_withdrawal_amount / Value_of_1_INR)
+                        .toFixed(2) + ')';
+                }
+
+                // }).then(() => {
+                document.getElementById('total_customer').innerHTML = total_customer;
+
+                document.getElementById('total_customer_wallet_balance').innerHTML = symbol +
+                    total_customer_wallet_balance.toFixed(2) + `<small>${c_total_customer_wallet_balance}</small>`;
+
+                document.getElementById('total_deposit_amount').innerHTML = symbol +
+                    total_deposit_amount.toFixed(2) + ` <small>${c_total_deposit_amount}</small>`;
+
+                document.getElementById('total_withdrawal_amount').innerHTML = symbol +
+                    total_withdrawal_amount.toFixed(2) + ` <small>${c_total_withdrawal_amount}</small>`;
+
+                document.getElementById('total_today_bid_amount').innerHTML = symbol +
+                    total_today_bid_amount.toFixed(2) + ` <small>${c_total_today_bid_amount}</small>`;
+
+                document.getElementById('total_today_win_amount').innerHTML = symbol +
+                    total_today_win_amount.toFixed(2) + ` <small>${c_total_today_win_amount}</small>`;
+
+                document.getElementById('today_deposit_amount').innerHTML = symbol +
+                    today_deposit_amount.toFixed(2) + ` <small>${c_today_deposit_amount}</small>`;
+
+                document.getElementById('today_withdrawal_amount').innerHTML = symbol +
+                    today_withdrawal_amount.toFixed(2) + ` <small>${c_today_withdrawal_amount}</small>`;
+
+                document.getElementById('total_monthly_bid_amount').innerHTML = symbol +
+                    total_monthly_bid_amount.toFixed(2) + ` <small>${c_total_monthly_bid_amount}</small>`;
+
+                document.getElementById('total_monthly_win_amount').innerHTML = symbol +
+                    total_monthly_win_amount.toFixed(2) + ` <small>${c_total_monthly_win_amount}</small>`;
+
+                document.getElementById('monthly_deposit_amount').innerHTML = symbol +
+                    monthly_deposit_amount.toFixed(2) + ` <small>${c_monthly_deposit_amount}</small>`;
+
+                document.getElementById('monthly_withdrawal_amount').innerHTML = symbol +
+                    monthly_withdrawal_amount.toFixed(2) + ` <small>${c_monthly_withdrawal_amount}</small>`;
+            });
+        </script>
+    @endpush
