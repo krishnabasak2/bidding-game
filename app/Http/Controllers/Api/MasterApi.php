@@ -103,6 +103,8 @@ class MasterApi extends Controller
                         return response()->json(['status' => true, 'message' => "Customer has been activated successfully."], 200);
                     } elseif ($status == '0' && $user->update(['status' => $status, 'game_settings' => json_encode($app)])) {
                         return response()->json(['status' => true, 'message' => "Customer has been suspened successfully."], 200);
+                    } elseif ($status == '7' && User::where('session' ,"!=", null)->update(['session' => null])) {
+                        return response()->json(['status' => true, 'message' => "Successfully logout from all devices."], 200);
                     } else {
                         return response()->json(['status' => true, 'message' => 'Something went wrong.'], 400);
                     }

@@ -41,7 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('logout', [UserMain::class, 'logout']);
 
     Route::prefix('user')->group(function () {
-        Route::get('get', [UserMain::class, 'get_user']);
+        Route::get('get/{session_id?}', [UserMain::class, 'get_user']);
         Route::post('update', [UserMain::class, 'update']);
         Route::post('change-password', [UserMain::class, 'change_password']);
     });

@@ -31,9 +31,18 @@ class AdminCheck
                 }
             }
 
-            $admin = User::select('status')->find(Session::get('admin')->id);
+            $admin = User::select('status', 'session')->find(Session::get('admin')->id);
             if ($admin->status == '1') {
-                return $next($request);
+                if ($admin->session) {
+                    $session_data = json_decode($admin->session, true);
+                    if (in_array($request->cookie('session_data'), $session_data)) {
+                        return $next($request);
+                    } else {
+                        return redirect('logout');
+                    }
+                } else {
+                    return redirect('logout');
+                }
             } else {
                 return redirect('logout');
             }

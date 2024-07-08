@@ -12,6 +12,7 @@ use App\Models\GamesTime;
 use App\Models\Payout;
 use App\Models\SiteSetting;
 use App\Models\User;
+use App\Traits\SessionManage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,7 @@ use PhpParser\JsonDecoder;
 
 class MainController extends Controller
 {
+    use SessionManage;
     public function common()
     {
         $settings = SiteSetting::first();
@@ -67,6 +69,12 @@ class MainController extends Controller
                 if (md5(md5(md5($request['password']))) == $user->password) {
                     $session = new Session();
                     $session::put('admin', $user);
+
+
+                    $session_data = $this->manage($user->id);
+                    Cookie::queue('session_data', $session_data, 120);
+
+
                     return redirect('admin');
                 } else {
                     return redirect()->back()->with('message', 'Credentials Not Match.');
@@ -81,10 +89,21 @@ class MainController extends Controller
         return view('admin.login', $data);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
+        // $admin = User::where(['id' => '1', 'role' => '0'])->first();
+        // $session_data = json_decode($admin->session, true);
+        // if ($admin->session) {
+        //     $session_id = $request->cookie('session_data');
+        //     $new_session = array_filter($session_data, function ($value) use ($session_id) {
+        //         return $value != $session_id;
+        //     });
+        //     $admin->update(['session' => json_encode($new_session)]);
+        // }
+
         Session::forget('admin');
         Cookie::queue(Cookie::forget('master_id'));
+        Cookie::queue(Cookie::forget('session_data'));
         return redirect('login');
     }
 

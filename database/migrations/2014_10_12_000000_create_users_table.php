@@ -24,6 +24,7 @@ return new class extends Migration
             $table->decimal('wallet', 10, 2)->default(0);
             $table->text('otp')->nullable();
             $table->longText('game_settings')->nullable();
+            $table->longText('session')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamp('created_at')->useCurrent();

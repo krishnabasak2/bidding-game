@@ -328,9 +328,13 @@ class GameController extends Controller
 
     public function bid_delete($id)
     {
-        $bid = BidsHistory::where('id', $id)->with('getUser')->first();
+        $bid = BidsHistory::where('id', $id)->with('getUser', 'result')->first();
         if (empty($bid)) {
             return response()->json(['status' => false, 'message' => 'Bid not found.']);
+        }
+
+        if ($bid->result->status == '1') {
+            return response()->json(['status' => false, 'message' => 'Sorry! Result has been decided.']);
         }
 
         if (Helper::wallet($bid->getUser->id, '1', $bid->bid_amount, '4', 'For bid cancel.') && $bid->forceDelete()) {

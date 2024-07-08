@@ -10,6 +10,7 @@ use App\Models\PayoutSetting;
 use App\Models\SiteSetting;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Traits\SessionManage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ use PhpParser\Node\Stmt\TryCatch;
 
 class UserMain extends Controller
 {
-
+    use SessionManage;
     public function register(Request $request)
     {
         try {
@@ -79,7 +80,10 @@ class UserMain extends Controller
                 if (Hash::check($request['password'], $user->password)) {
                     // $user->tokens()->where('tokenable_id', $user->id)->delete();
                     $token = $user->createToken('myApp')->plainTextToken;
-                    return response()->json(['status' => true, 'token' => $token, 'message' => 'Login successful.', 'data' => null], 200);
+
+                    $session_id = $this->manage($user->id);
+
+                    return response()->json(['status' => true, 'token' => $token, 'session_id' => $session_id, 'message' => 'Login successful.', 'data' => null], 200);
                 } else {
                     return response()->json(['status' => false, 'message' => 'Password not match.', 'data' => null], 400);
                 }
@@ -104,7 +108,7 @@ class UserMain extends Controller
     }
 
 
-    public function get_user()
+    public function get_user($session_id)
     {
         try {
             $admin = User::where(['id' => '1', 'role' => '0'])->first();
@@ -114,13 +118,23 @@ class UserMain extends Controller
 
             $user = User::where(['id' => Auth::id(), 'status' => '1'])->first();
             if (!empty($user)) {
-                if ($user->referer_uid) {
-                    $refer = User::where('id', $user->referer_uid)->first();
-                    $refer = $refer['phone'];
+
+                if ($user->session) {
+                    $session_data = json_decode($user->session, true);
+                    if (in_array($session_id, $session_data)) {
+                        if ($user->referer_uid) {
+                            $refer = User::where('id', $user->referer_uid)->first();
+                            $refer = $refer['phone'];
+                        } else {
+                            $refer = null;
+                        }
+                        return response()->json(['status' => true, 'user' => $user, 'refer' => $refer, 200]);
+                    } else {
+                        return response()->json(['status' => false, 'user' => null, 400]);
+                    }
                 } else {
-                    $refer = null;
+                    return response()->json(['status' => false, 'user' => null, 400]);
                 }
-                return response()->json(['status' => true, 'user' => $user, 'refer' => $refer, 200]);
             } else {
                 return response()->json(['status' => false, 'user' => null, 400]);
             }

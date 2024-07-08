@@ -194,6 +194,10 @@ class UserController extends Controller
             $user->update(['password' => Hash::make($password)]);
             $message = "New Password Has Been Generated Successfully. New Password is: {$password}";
             $reload = false;
+        } elseif ($type == '6') {
+            $user->update(['session' => null]);
+            $message = "Successfully logout from all devices.";
+            $reload = false;
         } else {
             $message = "Something Went Wrong.";
         }

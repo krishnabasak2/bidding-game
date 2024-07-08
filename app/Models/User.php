@@ -27,7 +27,8 @@ class User extends AuthUser
         'status',
         'referer_uid',
         'updated_at',
-        'game_settings'
+        'game_settings',
+        'session'
     ];
 
     protected $hidden = ['password'];

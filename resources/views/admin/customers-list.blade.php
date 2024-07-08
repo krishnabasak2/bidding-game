@@ -100,6 +100,12 @@
                                                                 onclick="item_status({{ $data['id'] }}, '5');"><i
                                                                     class="btn-icon-wrap fa fa-key"></i></button>
 
+                                                            <button type="button"
+                                                                class="btn btn-icon btn-dark btn-icon-style-1"
+                                                                data-toggle="tooltip" title="Logout"
+                                                                onclick="item_status({{ $data['id'] }}, '6');"><i
+                                                                    class="btn-icon-wrap fa fa-sign-out"></i></button>
+
                                                             @if ($title != 'Removed Users')
                                                                 <button type="button"
                                                                     class="btn btn-icon btn-danger btn-icon-style-1"
@@ -147,6 +153,9 @@
                         var btn = true;
                     } else if (status == '5') {
                         var textSms = 'Do you want to generate new password for this user?';
+                        var btn = true;
+                    } else if (status == '6') {
+                        var textSms = 'Do you want to logout this user from all devices?';
                         var btn = true;
                     } else {
                         var textSms = 'Do you want to change status for this user?';
